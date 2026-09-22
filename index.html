@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Save Our Funds — the Source of Funds team at MoMo</title>
+<meta name="description" content="Every payment begins with one question: which source? The Source of Funds team at MoMo owns the answer.">
+<meta property="og:title" content="Save Our Funds">
+<meta property="og:description" content="Every payment begins with one question: which source? The Source of Funds team at MoMo owns the answer.">
+<meta property="og:url" content="https://saveourfunds.dev/">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#07070A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2307070A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23D6FF3F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@300;400;600&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#07070A;
+  --chalk:#E9EDF2;
+  --ash:#767C88;
+  --lime:#D6FF3F;
+  --momo:#D82D8B;
+  --momo-deep:#A50064;
+  --hair:rgba(233,237,242,.11);
+  --display:"Martian Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --body:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --gutter:clamp(20px,5vw,72px);
+  --rule:clamp(16px,2.6vw,44px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  background:var(--void);
+  color:var(--chalk);
+  font-family:var(--body);
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:2px}
+
+/* ── ambient ─────────────────────────────── */
+.glow{
+  position:fixed;
+  left:clamp(-10%,18vw,32%);top:46%;
+  width:min(150vw,1250px);aspect-ratio:1;
+  translate:-50% -50%;
+  border-radius:50%;
+  background:radial-gradient(circle,var(--momo-deep) 0%,transparent 62%);
+  opacity:.20;
+  filter:blur(40px);
+  transition:background 1.1s ease,opacity 1.1s ease;
+  pointer-events:none;
+  z-index:0;
+}
+.glow[data-accent="lime"]{background:radial-gradient(circle,var(--lime) 0%,transparent 62%);opacity:.11}
+.grain{
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── shared shell ────────────────────────── */
+.masthead,.hero,.sources,.colophon{position:relative;z-index:2;padding-inline:var(--gutter)}
+
+/* ── masthead ────────────────────────────── */
+.masthead{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding-block:clamp(18px,2.4vw,26px);
+  border-bottom:1px solid var(--hair);
+}
+.mark{display:flex;align-items:center;gap:9px;font-family:var(--display);font-size:11px;font-weight:600;letter-spacing:.22em}
+.mark::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lime)}
+.whereabouts{font-family:var(--display);font-size:10px;font-weight:300;letter-spacing:.2em;color:var(--ash);text-transform:uppercase}
+
+/* ── hero ────────────────────────────────── */
+.hero{
+  flex:1;
+  display:grid;
+  align-content:center;
+  gap:clamp(30px,4.5vw,56px) clamp(48px,7vw,110px);
+  padding-block:clamp(48px,7vw,96px);
+}
+@media (min-width:1040px){
+  .hero{
+    grid-template-columns:max-content minmax(24ch,34ch);
+    grid-template-areas:"eyebrow ." "spine tagline";
+    align-items:end;
+  }
+  .eyebrow{grid-area:eyebrow}
+  .spine{grid-area:spine}
+  .tagline{grid-area:tagline;margin:0 0 .42em}
+}
+.eyebrow{
+  margin:0 0 clamp(28px,4.5vw,52px);
+  font-family:var(--display);font-size:10px;font-weight:400;letter-spacing:.26em;
+  color:var(--ash);text-transform:uppercase;
+}
+.eyebrow b{color:var(--chalk);font-weight:400}
+
+.spine{margin:0;display:grid;gap:0;width:max-content;max-width:100%}
+.line{display:grid;grid-template-columns:auto var(--rule) auto;justify-content:start;align-items:baseline}
+.anchor,.tail{
+  font-family:var(--display);
+  font-weight:600;
+  font-size:clamp(2.2rem,10.8vw,11.5rem);
+  line-height:1.06;
+  letter-spacing:-.045em;
+}
+.anchor{color:var(--chalk)}
+.rule{border-left:1px solid rgba(233,237,242,.22);align-self:stretch;justify-self:center}
+.tail{color:var(--momo);white-space:nowrap}
+.spine[data-accent="lime"] .tail{color:var(--lime)}
+.tail.is-fixed{color:var(--chalk)}
+.spine[data-accent="lime"] .tail.is-fixed{color:var(--chalk)}
+
+.tail span{display:inline-block;will-change:transform,opacity}
+@keyframes drop{from{opacity:0;transform:translateY(-.34em)}to{opacity:1;transform:none}}
+.tail span{animation:drop .38s cubic-bezier(.2,.85,.25,1) both}
+
+.tagline{
+  margin:clamp(32px,5vw,56px) 0 0;
+  max-width:31ch;
+  font-size:clamp(15px,1.5vw,18px);
+  line-height:1.5;
+  color:var(--ash);
+}
+.tagline em{font-style:normal;color:var(--chalk)}
+
+/* ── sources ─────────────────────────────── */
+.sources{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  border-top:1px solid var(--hair);
+}
+.source{padding-block:clamp(22px,3vw,30px);padding-right:24px}
+.source+.source{border-left:1px solid var(--hair);padding-left:clamp(20px,3vw,34px)}
+.source dt{font-family:var(--display);font-size:11px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--chalk)}
+.source dd{margin:8px 0 0;font-size:13.5px;line-height:1.5;color:var(--ash)}
+
+/* ── colophon ────────────────────────────── */
+.colophon{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;
+  padding-block:clamp(20px,2.6vw,28px);
+  border-top:1px solid var(--hair);
+  font-family:var(--display);font-size:10px;font-weight:300;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);
+}
+.colophon a{color:var(--chalk);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:2px;transition:border-color .2s ease,color .2s ease}
+.colophon a:hover{color:var(--lime);border-color:var(--lime)}
+
+@media (max-width:560px){
+  .source+.source{border-left:0;border-top:1px solid var(--hair);padding-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  .tail span{animation:none}
+  .glow{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="glow" id="glow" data-accent="momo"></div>
+<div class="grain"></div>
+
+<header class="masthead">
+  <span class="mark">SOF</span>
+  <span class="whereabouts">MoMo · Ho Chi Minh City</span>
+</header>
+
+<main class="hero">
+  <p class="eyebrow">Three letters, <b>two readings</b></p>
+
+  <h1 class="spine" id="spine" data-accent="momo" aria-label="Source of Funds. Save Our Funds.">
+    <span class="line" aria-hidden="true">
+      <span class="anchor">S</span><span class="rule"></span><span class="tail" data-slot="0"></span>
+    </span>
+    <span class="line" aria-hidden="true">
+      <span class="anchor">O</span><span class="rule"></span><span class="tail" data-slot="1"></span>
+    </span>
+    <span class="line" aria-hidden="true">
+      <span class="anchor">F</span><span class="rule"></span><span class="tail is-fixed">UNDS</span>
+    </span>
+  </h1>
+
+  <p class="tagline">Every payment begins with one question: <em>which source?</em> We own the answer — and the money behind it.</p>
+</main>
+
+<dl class="sources">
+  <div class="source">
+    <dt>Wallet</dt>
+    <dd>The balance people top up, spend, and trust us to hold.</dd>
+  </div>
+  <div class="source">
+    <dt>Linked bank</dt>
+    <dd>Accounts bound once, then charged in milliseconds.</dd>
+  </div>
+  <div class="source">
+    <dt>Card</dt>
+    <dd>Domestic and international rails, routed per transaction.</dd>
+  </div>
+</dl>
+
+<footer class="colophon">
+  <span>saveourfunds.dev</span>
+  <a href="https://github.com/kinhluan/saveourfunds.dev">Fork this page →</a>
+</footer>
+
+<script>
+(function () {
+  var READINGS = [
+    { accent: 'momo', tails: ['OURCE', 'F'] },
+    { accent: 'lime', tails: ['AVE', 'UR'] }
+  ];
+  var HOLD = 3600;
+
+  var spine = document.getElementById('spine');
+  var glow = document.getElementById('glow');
+  var slots = [].slice.call(spine.querySelectorAll('.tail[data-slot]'));
+  var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var index = 0;
+
+  // Lock each column to its widest reading so S, O and F never shift.
+  slots.forEach(function (slot, i) {
+    var widest = READINGS.reduce(function (n, r) { return Math.max(n, r.tails[i].length); }, 0);
+    slot.style.minWidth = widest + 'ch';
+  });
+
+  function render(reading, animate) {
+    spine.dataset.accent = reading.accent;
+    glow.dataset.accent = reading.accent;
+    slots.forEach(function (slot, i) {
+      var text = reading.tails[i];
+      slot.textContent = '';
+      for (var c = 0; c < text.length; c++) {
+        var glyph = document.createElement('span');
+        glyph.textContent = text[c];
+        if (animate) glyph.style.animationDelay = (i * 70 + c * 34) + 'ms';
+        else glyph.style.animation = 'none';
+        slot.appendChild(glyph);
+      }
+    });
+  }
+
+  if (still) {
+    render(READINGS[1], false);   // settle on the human reading
+    return;
+  }
+
+  render(READINGS[0], true);
+  setInterval(function () {
+    index = (index + 1) % READINGS.length;
+    render(READINGS[index], true);
+  }, HOLD);
+})();
+</script>
+</body>
+</html>
