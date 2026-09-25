@@ -61,6 +61,13 @@ a{color:inherit}
   z-index:0;
 }
 .glow[data-accent="lime"]{background:radial-gradient(circle,var(--lime) 0%,transparent 62%);opacity:.11}
+@keyframes drift{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(6vw,-5vh) scale(1.06)}
+  66%{transform:translate(-4vw,4vh) scale(.96)}
+}
+.glow{animation:drift 26s ease-in-out infinite}
+.field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 .grain{
   position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.045;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -77,7 +84,9 @@ a{color:inherit}
 }
 .mark{display:flex;align-items:center;gap:9px;font-family:var(--display);font-size:11px;font-weight:600;letter-spacing:.22em}
 .mark::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lime)}
-.whereabouts{font-family:var(--display);font-size:10px;font-weight:300;letter-spacing:.2em;color:var(--ash);text-transform:uppercase}
+.whereabouts{font-family:var(--display);font-size:10px;font-weight:300;letter-spacing:.2em;color:var(--ash);text-transform:uppercase;text-align:right}
+.whereabouts span{white-space:nowrap}
+@media (max-width:480px){.whereabouts{letter-spacing:.1em}}
 
 /* ── hero ────────────────────────────────── */
 .hero{
@@ -135,14 +144,14 @@ a{color:inherit}
 
 /* ── sources ─────────────────────────────── */
 .sources{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  list-style:none;margin:0;
+  display:flex;flex-wrap:wrap;gap:10px 28px;
+  padding-block:clamp(18px,2.4vw,24px);
   border-top:1px solid var(--hair);
+  font-size:14px;color:var(--ash);
 }
-.source{padding-block:clamp(22px,3vw,30px);padding-right:24px}
-.source+.source{border-left:1px solid var(--hair);padding-left:clamp(20px,3vw,34px)}
-.source dt{font-family:var(--display);font-size:11px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--chalk)}
-.source dd{margin:8px 0 0;font-size:13.5px;line-height:1.5;color:var(--ash)}
+.sources li{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.sources svg{width:17px;height:17px;flex:none;fill:none;stroke:var(--chalk);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;opacity:.7}
 
 /* ── colophon ────────────────────────────── */
 .colophon{
@@ -154,22 +163,20 @@ a{color:inherit}
 .colophon a{color:var(--chalk);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:2px;transition:border-color .2s ease,color .2s ease}
 .colophon a:hover{color:var(--lime);border-color:var(--lime)}
 
-@media (max-width:560px){
-  .source+.source{border-left:0;border-top:1px solid var(--hair);padding-left:0}
-}
 @media (prefers-reduced-motion:reduce){
   .tail span{animation:none}
-  .glow{transition:none}
+  .glow{transition:none;animation:none}
 }
 </style>
 </head>
 <body>
 <div class="glow" id="glow" data-accent="momo"></div>
+<canvas class="field" id="field" aria-hidden="true"></canvas>
 <div class="grain"></div>
 
 <header class="masthead">
   <span class="mark">SOF</span>
-  <span class="whereabouts">MoMo · Ho Chi Minh City</span>
+  <span class="whereabouts">MoMo · <span>Ho Chi Minh City · Vietnam</span></span>
 </header>
 
 <main class="hero">
@@ -190,20 +197,25 @@ a{color:inherit}
   <p class="tagline">Every payment begins with one question: <em>which source?</em> We own the answer — and the money behind it.</p>
 </main>
 
-<dl class="sources">
-  <div class="source">
-    <dt>Wallet</dt>
-    <dd>The balance people top up, spend, and trust us to hold.</dd>
-  </div>
-  <div class="source">
-    <dt>Linked bank</dt>
-    <dd>Accounts bound once, then charged in milliseconds.</dd>
-  </div>
-  <div class="source">
-    <dt>Card</dt>
-    <dd>Domestic and international rails, routed per transaction.</dd>
-  </div>
-</dl>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H18v3"/><path d="M4 7.5V17a2 2 0 0 0 2 2h14V8H6.5A2.5 2.5 0 0 1 4 7.5Z"/><circle cx="16" cy="13.5" r="1"/></symbol>
+    <symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 9.5 12 4l9 5.5"/><path d="M5 10v7M9.5 10v7M14.5 10v7M19 10v7"/><path d="M3 20h18"/></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3 10h18M7 14.5h4"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.3 3.5 5.2 3.5 8.5s-1.1 6.2-3.5 8.5c-2.4-2.3-3.5-5.2-3.5-8.5s1.1-6.2 3.5-8.5Z"/></symbol>
+    <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 20v-8"/><path d="M12 12c0-4 2.5-6.5 7-6.5 0 4.5-2.5 6.5-7 6.5Z"/><path d="M12 14.5c0-3-2-5-5.5-5 0 3.5 2 5 5.5 5Z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  </defs>
+</svg>
+
+<ul class="sources" lang="vi" aria-label="Sources of funds">
+  <li><svg aria-hidden="true"><use href="#i-wallet"/></svg>Ví MoMo</li>
+  <li><svg aria-hidden="true"><use href="#i-bank"/></svg>Tài khoản ngân hàng liên kết</li>
+  <li><svg aria-hidden="true"><use href="#i-card"/></svg>Thẻ ATM NAPAS</li>
+  <li><svg aria-hidden="true"><use href="#i-globe"/></svg>Visa / Mastercard / JCB</li>
+  <li><svg aria-hidden="true"><use href="#i-sprout"/></svg>Túi Thần Tài</li>
+  <li><svg aria-hidden="true"><use href="#i-clock"/></svg>Ví Trả Sau</li>
+</ul>
 
 <footer class="colophon">
   <span>saveourfunds.dev</span>
@@ -256,6 +268,107 @@ a{color:inherit}
     index = (index + 1) % READINGS.length;
     render(READINGS[index], true);
   }, HOLD);
+})();
+
+// Dot field: packets of money travel along the grid rows; the cursor lights nearby dots.
+(function () {
+  var ACCENTS = { momo: [216, 45, 139], lime: [214, 255, 63] };
+  var GAP = 28, DOT = 0.9, REACH = 150, TRAIL = 140;
+
+  var canvas = document.getElementById('field');
+  var glow = document.getElementById('glow');
+  var ctx = canvas.getContext('2d');
+  var grid = document.createElement('canvas');
+  var gctx = grid.getContext('2d');
+  var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var w, h, dpr, cols, rows, ox, oy, packets = [];
+  var pointer = { x: -1e4, y: -1e4, a: 0, on: false };
+  var rgb = ACCENTS.momo.slice();
+
+  function size() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = innerWidth; h = innerHeight;
+    [canvas, grid].forEach(function (c) { c.width = w * dpr; c.height = h * dpr; });
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    gctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cols = Math.ceil(w / GAP) + 1; rows = Math.ceil(h / GAP) + 1;
+    ox = (w - (cols - 1) * GAP) / 2; oy = (h - (rows - 1) * GAP) / 2;
+
+    // Static grid is painted once; each frame only blits it.
+    gctx.clearRect(0, 0, w, h);
+    gctx.fillStyle = 'rgba(233,237,242,.07)';
+    for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
+      gctx.beginPath(); gctx.arc(ox + c * GAP, oy + r * GAP, DOT, 0, 7); gctx.fill();
+    }
+    packets = [];
+    var count = w < 700 ? 3 : 6;
+    for (var i = 0; i < count; i++) packets.push(spawn(true));
+  }
+
+  function spawn(scatter) {
+    return {
+      row: Math.floor(Math.random() * rows),
+      x: scatter ? Math.random() * w : -TRAIL,
+      v: 50 + Math.random() * 90,
+      dir: Math.random() < .5 ? 1 : -1
+    };
+  }
+
+  function lightDot(x, y, a) {
+    ctx.fillStyle = 'rgba(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ',' + a + ')';
+    ctx.beginPath(); ctx.arc(x, y, DOT + a * 1.1, 0, 7); ctx.fill();
+  }
+
+  var last = performance.now();
+  function frame(now) {
+    var dt = Math.min((now - last) / 1000, .05); last = now;
+
+    // Ease toward the current reading's accent so colour shifts with the headline.
+    var target = ACCENTS[glow.dataset.accent] || ACCENTS.momo;
+    for (var k = 0; k < 3; k++) rgb[k] += (target[k] - rgb[k]) * Math.min(dt * 2.5, 1);
+    pointer.a += ((pointer.on ? 1 : 0) - pointer.a) * Math.min(dt * 6, 1);
+
+    ctx.clearRect(0, 0, w, h);
+    ctx.drawImage(grid, 0, 0, w, h);
+
+    // Packets: a faint streak, plus the dots it passes over brighten.
+    packets.forEach(function (p, i) {
+      p.x += p.v * dt;
+      var head = p.dir > 0 ? p.x : w - p.x;
+      if (p.x > w + TRAIL) { packets[i] = spawn(false); return; }
+      var y = oy + p.row * GAP;
+      var tail = head - TRAIL * p.dir;
+      var g = ctx.createLinearGradient(tail, y, head, y);
+      g.addColorStop(0, 'rgba(' + rgb.map(Math.round) + ',0)');
+      g.addColorStop(1, 'rgba(' + rgb.map(Math.round) + ',.35)');
+      ctx.strokeStyle = g; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(tail, y); ctx.lineTo(head, y); ctx.stroke();
+      for (var c = 0; c < cols; c++) {
+        var x = ox + c * GAP, d = (head - x) * p.dir;
+        if (d >= 0 && d < TRAIL) lightDot(x, y, .55 * (1 - d / TRAIL));
+      }
+    });
+
+    // Cursor: only visit the dots inside its reach.
+    if (pointer.a > .01) {
+      var c0 = Math.max(0, Math.floor((pointer.x - REACH - ox) / GAP)), c1 = Math.min(cols - 1, Math.ceil((pointer.x + REACH - ox) / GAP));
+      var r0 = Math.max(0, Math.floor((pointer.y - REACH - oy) / GAP)), r1 = Math.min(rows - 1, Math.ceil((pointer.y + REACH - oy) / GAP));
+      for (var r = r0; r <= r1; r++) for (var c = c0; c <= c1; c++) {
+        var dx = ox + c * GAP - pointer.x, dy = oy + r * GAP - pointer.y;
+        var f = 1 - Math.sqrt(dx * dx + dy * dy) / REACH;
+        if (f > 0) lightDot(ox + c * GAP, oy + r * GAP, .6 * f * f * pointer.a);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  size();
+  addEventListener('resize', size);
+  if (still) { ctx.drawImage(grid, 0, 0, w, h); addEventListener('resize', function () { ctx.drawImage(grid, 0, 0, w, h); }); return; }
+  addEventListener('pointermove', function (e) { pointer.x = e.clientX; pointer.y = e.clientY; pointer.on = true; }, { passive: true });
+  document.addEventListener('pointerleave', function () { pointer.on = false; });
+  addEventListener('blur', function () { pointer.on = false; });
+  requestAnimationFrame(frame);
 })();
 </script>
 </body>
