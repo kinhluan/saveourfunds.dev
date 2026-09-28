@@ -254,39 +254,78 @@ button{font:inherit;color:inherit}
 .toast.show{opacity:1;transform:none}
 
 /* ── lightbox ────────────────────────────── */
+/* Centered card, not full screen: the stage never grows past what the photos can fill sharply. */
+@property --lb-angle{syntax:"<angle>";inherits:false;initial-value:0deg}
 .lightbox{
-  padding:0;border:0;margin:0;
-  width:100vw;height:100dvh;max-width:none;max-height:none;
-  background:rgba(26,16,48,.96);color:var(--chalk);
+  padding:0;margin:auto;
+  width:min(calc(100vw - 32px),720px);max-width:none;max-height:calc(100dvh - 32px);
+  border:2px solid transparent;border-radius:26px;overflow:hidden;
+  background:
+    linear-gradient(rgba(26,16,48,.94),rgba(26,16,48,.94)) padding-box,
+    conic-gradient(from var(--lb-angle),var(--pink-hot),var(--tan),var(--lime),#7B5CFF,var(--pink-hot)) border-box;
+  box-shadow:0 0 0 1px rgba(255,255,255,.06),0 30px 80px -20px rgba(227,35,143,.55),0 0 120px -30px rgba(123,92,255,.5);
+  color:var(--chalk);
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  animation:lb-spin 7s linear infinite;
 }
-.lightbox::backdrop{background:rgba(26,16,48,.7)}
-.lightbox[open]{display:flex;flex-direction:column}
-.lb-stage{outline:none;flex:1;min-height:0;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none}
+.lightbox::backdrop{
+  background:radial-gradient(60% 60% at 50% 40%,rgba(200,30,126,.28),rgba(26,16,48,.82));
+  -webkit-backdrop-filter:blur(10px) saturate(1.2);backdrop-filter:blur(10px) saturate(1.2);
+}
+.lightbox[open]{display:flex;flex-direction:column;animation:lb-spin 7s linear infinite,lb-in .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes lb-spin{to{--lb-angle:360deg}}
+@keyframes lb-in{from{opacity:0;transform:translateY(10px) scale(.97)}}
+@media (prefers-reduced-motion:reduce){.lightbox,.lightbox[open]{animation:none}}
+
+.lb-stage{
+  outline:none;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;
+  margin:10px 10px 0;border-radius:18px;
+  height:min(72dvh,640px);
+  background:
+    radial-gradient(circle at 1px 1px,rgba(255,255,255,.09) 1px,transparent 0) 0 0/18px 18px,
+    rgba(255,255,255,.03);
+}
+.lb-stage.is-loading::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.08) 50%,transparent 70%) 0 0/200% 100%;
+  animation:lb-shimmer 1.1s linear infinite;
+}
+@keyframes lb-shimmer{to{background-position:-200% 0}}
 .lb-img{
-  max-width:min(92vw,1100px);max-height:calc(100dvh - 110px);
+  max-width:calc(100% - 24px);max-height:calc(100% - 24px);
   border-radius:12px;transform-origin:center;will-change:transform;
+  box-shadow:0 12px 40px -12px rgba(0,0,0,.6);
   user-select:none;-webkit-user-select:none;-webkit-user-drag:none;cursor:zoom-in;
+  transition:opacity .2s ease;
 }
-.lb-img.is-animated{transition:transform .22s ease}
+.lb-stage.is-loading .lb-img{opacity:0}
+.lb-img.is-animated{transition:transform .22s ease,opacity .2s ease}
 .lb-stage.is-zoomed .lb-img{cursor:grab}
 .lb-stage.is-dragging .lb-img{cursor:grabbing}
 .lb-bar{
   display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;
-  padding:12px var(--gutter) max(12px,env(safe-area-inset-bottom));
-  border-top:1px solid var(--hair);font-size:14px;color:var(--ash);
+  padding:12px 16px 14px 20px;font-size:14px;color:var(--ash);
 }
+.lb-caption{min-width:0}
 .lb-caption b{color:var(--chalk);font-weight:500}
-.lb-tools{display:flex;align-items:center;gap:6px}
+.lb-tools{display:flex;align-items:center;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--hair)}
 .lb-tools button{
-  min-width:36px;height:36px;padding:0 10px;cursor:pointer;
-  border:1px solid var(--hair);border-radius:10px;background:transparent;font-size:14px;color:var(--chalk);
-  transition:border-color .15s ease,color .15s ease;
+  min-width:34px;height:34px;padding:0 12px;cursor:pointer;
+  border:0;border-radius:999px;background:transparent;font-size:14px;color:var(--chalk);
+  transition:background .15s ease,color .15s ease;
 }
-.lb-tools button:hover{border-color:var(--tan);color:var(--tan)}
+.lb-tools button:hover{background:rgba(255,255,255,.1);color:var(--white)}
 .lb-tools button:disabled{opacity:.35;pointer-events:none}
-.lb-level{min-width:48px;text-align:center;color:var(--chalk)}
-.lb-close{margin-left:8px}
-@media (max-width:520px){.lb-hint{display:none}}
+.lb-level{min-width:48px;text-align:center;color:var(--chalk);font-variant-numeric:tabular-nums}
+.lb-close{
+  position:absolute;top:20px;right:20px;z-index:2;
+  width:38px;height:38px;padding:0;border-radius:50%;cursor:pointer;
+  border:1px solid rgba(255,255,255,.2);background:rgba(26,16,48,.6);color:var(--white);font-size:15px;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  transition:background .15s ease;
+}
+.lb-close:hover{background:var(--pink)}
+@media (max-width:520px){.lb-hint{display:none}.lb-stage{height:min(62dvh,520px)}}
 
 /* ── colophon ────────────────────────────── */
 .colophon{
@@ -371,6 +410,7 @@ button{font:inherit;color:inherit}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <dialog class="lightbox" id="lightbox" aria-label="Image viewer">
+  <button type="button" class="lb-close" id="lb-close" aria-label="Close">✕</button>
   <div class="lb-stage" id="lb-stage" tabindex="-1" autofocus><img class="lb-img" id="lb-img" alt="" draggable="false"></div>
   <div class="lb-bar">
     <span class="lb-caption"><b id="lb-caption"></b> <span class="lb-hint">Scroll, pinch or double-click to zoom</span></span>
@@ -379,7 +419,6 @@ button{font:inherit;color:inherit}
       <span class="lb-level" id="lb-level" aria-live="polite">100%</span>
       <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
       <button type="button" data-zoom="reset">Fit</button>
-      <button type="button" class="lb-close" id="lb-close" aria-label="Close">✕</button>
     </div>
   </div>
 </dialog>
@@ -600,7 +639,8 @@ button{font:inherit;color:inherit}
   });
 
   // Lightbox: scale + translate on one image; pan is clamped so the image never leaves the stage.
-  var MIN = 1, MAX = 4, STEP = 1.5;
+  // MAX is recomputed per image so zoom stops at the photo's native resolution instead of upscaling it.
+  var MIN = 1, MAX = 1, ZOOM_CAP = 4, STEP = 1.5;
   var dialog = document.getElementById('lightbox');
   var stage = document.getElementById('lb-stage');
   var lbImg = document.getElementById('lb-img');
@@ -612,13 +652,32 @@ button{font:inherit;color:inherit}
   var pointers = new Map();
   var drag = null, pinch = null, moved = false;
 
+  function fitZoomLimit() {
+    MAX = lbImg.naturalWidth && lbImg.offsetWidth
+      ? clamp(lbImg.naturalWidth / lbImg.offsetWidth, MIN, ZOOM_CAP)
+      : MIN;
+  }
+
+  lbImg.addEventListener('load', function () {
+    stage.classList.remove('is-loading');
+    fitZoomLimit();
+    setView(1, 0, 0, false);
+  });
+
   function openLightbox(src, alt) {
-    lbImg.src = src;
+    MAX = MIN;
+    stage.classList.add('is-loading');
     lbImg.alt = alt;
     caption.textContent = alt;
     setView(1, 0, 0, false);
     document.documentElement.style.overflow = 'hidden';
     dialog.showModal();
+    lbImg.src = src;
+    if (lbImg.complete && lbImg.naturalWidth) {
+      stage.classList.remove('is-loading');
+      fitZoomLimit();
+      setView(1, 0, 0, false);
+    }
   }
 
   dialog.addEventListener('close', function () {
@@ -720,7 +779,11 @@ button{font:inherit;color:inherit}
     if (!moved && !onImage(e)) dialog.close();
   });
 
-  addEventListener('resize', function () { if (dialog.open) setView(view.s, view.x, view.y, false); });
+  addEventListener('resize', function () {
+    if (!dialog.open) return;
+    fitZoomLimit();
+    setView(view.s, view.x, view.y, false);
+  });
 })();
 </script>
 </body>
