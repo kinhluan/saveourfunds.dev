@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SOF Team Shirts — saveourfunds.dev</title>
+<meta name="description" content="Three cuts, one crew. The Source of Funds team shirt collection.">
+<meta name="theme-color" content="#07070A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2307070A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23D6FF3F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@300;400;600&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#07070A;
+  --panel:#111116;
+  --chalk:#E9EDF2;
+  --ash:#767C88;
+  --lime:#D6FF3F;
+  --momo:#D82D8B;
+  --momo-deep:#A50064;
+  --hair:rgba(233,237,242,.11);
+  --media-bg:#EDEBE4;
+  --display:"Martian Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --body:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --gutter:clamp(20px,5vw,72px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  min-height:100svh;
+  background:var(--void);
+  color:var(--chalk);
+  font-family:var(--body);
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:2px}
+button{font:inherit;color:inherit}
+
+/* ── ambient ─────────────────────────────── */
+.glow{
+  position:fixed;
+  left:clamp(-10%,18vw,32%);top:20%;
+  width:min(150vw,1250px);aspect-ratio:1;
+  translate:-50% -50%;
+  border-radius:50%;
+  background:radial-gradient(circle,var(--momo-deep) 0%,transparent 62%);
+  opacity:.16;
+  filter:blur(40px);
+  pointer-events:none;
+  z-index:0;
+  animation:drift 26s ease-in-out infinite;
+}
+@keyframes drift{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(6vw,-5vh) scale(1.06)}
+  66%{transform:translate(-4vw,4vh) scale(.96)}
+}
+.grain{
+  position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.045;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-reduced-motion:reduce){.glow{animation:none}}
+
+/* ── shared shell ────────────────────────── */
+.masthead,.intro,.logos,.lookbook-section,.colophon{position:relative;z-index:2;padding-inline:var(--gutter)}
+
+/* ── masthead ────────────────────────────── */
+.masthead{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding-block:clamp(18px,2.4vw,26px);
+  border-bottom:1px solid var(--hair);
+}
+.mark{display:flex;align-items:center;gap:9px;font-family:var(--display);font-size:11px;font-weight:600;letter-spacing:.22em}
+.mark::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lime)}
+.brand{display:flex;align-items:center;gap:clamp(16px,2.6vw,28px)}
+.mark{text-decoration:none}
+.nav{display:flex;gap:clamp(14px,2vw,22px);padding-left:clamp(16px,2.6vw,28px);border-left:1px solid var(--hair);font-family:var(--display);font-size:10px;font-weight:400;letter-spacing:.18em;text-transform:uppercase}
+.nav a{color:var(--ash);text-decoration:none;padding-block:3px;border-bottom:1px solid transparent;transition:color .2s ease,border-color .2s ease}
+.nav a:hover{color:var(--chalk)}
+.nav a[aria-current="page"]{color:var(--chalk);border-color:var(--lime)}
+@media (max-width:520px){.whereabouts{display:none}}
+.whereabouts{font-family:var(--display);font-size:10px;font-weight:300;letter-spacing:.2em;color:var(--ash);text-transform:uppercase;text-align:right}
+.whereabouts span{white-space:nowrap}
+
+/* ── intro ───────────────────────────────── */
+.intro{padding-block:clamp(48px,7vw,88px) clamp(24px,4vw,40px)}
+.eyebrow{
+  margin:0 0 clamp(16px,2.4vw,22px);
+  font-family:var(--display);font-size:10px;font-weight:400;letter-spacing:.26em;
+  color:var(--ash);text-transform:uppercase;
+}
+.title{
+  margin:0;
+  font-family:var(--display);font-weight:600;
+  font-size:clamp(2rem,7vw,4.6rem);
+  line-height:1.06;letter-spacing:-.03em;
+  color:var(--chalk);
+}
+.title em{font-style:normal;color:var(--momo)}
+.tagline{
+  margin:clamp(18px,2.6vw,26px) 0 0;
+  max-width:52ch;
+  font-size:clamp(15px,1.6vw,18px);
+  color:var(--ash);
+}
+.tagline em{font-style:normal;color:var(--chalk)}
+
+/* ── logos ───────────────────────────────── */
+.logos{padding-block:clamp(20px,3vw,32px)}
+.section-eyebrow{
+  margin:0 0 16px;
+  font-family:var(--display);font-size:10px;font-weight:400;letter-spacing:.22em;
+  color:var(--ash);text-transform:uppercase;
+}
+.logo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(12px,2vw,20px);max-width:520px}
+.logo-card{
+  margin:0;border:1px solid var(--hair);border-radius:16px;overflow:hidden;
+  background:var(--panel);
+}
+.logo-card .zoomable{display:block;width:100%;padding:0;border:0;background:none}
+.logo-card img{display:block;width:100%;aspect-ratio:1;object-fit:contain;padding:clamp(10px,2vw,18px)}
+.logo-card figcaption{
+  padding:10px 14px;font-family:var(--display);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ash);border-top:1px solid var(--hair);
+}
+
+/* ── lookbook ────────────────────────────── */
+.lookbook-section{padding-block:clamp(28px,4vw,44px) clamp(56px,8vw,96px)}
+.lookbook{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:clamp(20px,3vw,32px);
+}
+@media (max-width:900px){.lookbook{grid-template-columns:1fr;max-width:420px}}
+.product{border:1px solid var(--hair);border-radius:20px;padding:clamp(14px,1.6vw,18px);background:rgba(233,237,242,.02)}
+.product-media{
+  display:block;width:100%;padding:0;border:0;
+  border-radius:14px;overflow:hidden;background:var(--media-bg);
+  aspect-ratio:1;
+}
+.zoomable{cursor:zoom-in}
+.zoomable img{transition:transform .35s ease}
+.zoomable:hover img{transform:scale(1.03)}
+.product-image{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .18s ease}
+.product-body{padding-top:clamp(14px,1.8vw,18px)}
+.product-name{
+  margin:0;font-family:var(--display);font-weight:600;
+  font-size:clamp(1.1rem,2vw,1.4rem);letter-spacing:-.01em;color:var(--chalk);
+}
+.product-color-label{margin:4px 0 12px;font-size:13px;color:var(--ash)}
+.swatches{display:flex;gap:10px;margin-bottom:14px}
+.swatch{
+  width:24px;height:24px;border-radius:50%;padding:0;cursor:pointer;
+  background:var(--sw);border:1px solid rgba(233,237,242,.35);
+  transition:box-shadow .15s ease,transform .15s ease;
+}
+.swatch:hover{transform:scale(1.08)}
+.swatch[aria-pressed="true"]{box-shadow:0 0 0 2px var(--void),0 0 0 4px var(--lime)}
+.thumbs{display:flex;flex-wrap:wrap;gap:8px}
+.thumb{
+  width:48px;height:48px;border-radius:8px;overflow:hidden;padding:0;cursor:pointer;
+  border:1px solid var(--hair);background:var(--media-bg);
+  opacity:.55;transition:opacity .15s ease,border-color .15s ease;
+}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb:hover{opacity:.85}
+.thumb[aria-pressed="true"]{opacity:1;border-color:var(--lime)}
+
+/* ── lightbox ────────────────────────────── */
+.lightbox{
+  padding:0;border:0;margin:0;
+  width:100vw;height:100dvh;max-width:none;max-height:none;
+  background:rgba(7,7,10,.96);color:var(--chalk);
+}
+.lightbox::backdrop{background:rgba(7,7,10,.7)}
+.lightbox[open]{display:flex;flex-direction:column}
+.lb-stage{outline:none;flex:1;min-height:0;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none}
+.lb-img{
+  max-width:min(92vw,1100px);max-height:calc(100dvh - 110px);
+  border-radius:12px;transform-origin:center;will-change:transform;
+  user-select:none;-webkit-user-select:none;-webkit-user-drag:none;cursor:zoom-in;
+}
+.lb-img.is-animated{transition:transform .22s ease}
+.lb-stage.is-zoomed .lb-img{cursor:grab}
+.lb-stage.is-dragging .lb-img{cursor:grabbing}
+.lb-bar{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;
+  padding:12px var(--gutter) max(12px,env(safe-area-inset-bottom));
+  border-top:1px solid var(--hair);
+  font-family:var(--display);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);
+}
+.lb-caption b{color:var(--chalk);font-weight:400}
+.lb-tools{display:flex;align-items:center;gap:6px}
+.lb-tools button{
+  min-width:34px;height:34px;padding:0 10px;cursor:pointer;
+  border:1px solid var(--hair);border-radius:8px;background:transparent;
+  font-family:var(--display);font-size:12px;letter-spacing:.06em;color:var(--chalk);
+  transition:border-color .15s ease,color .15s ease;
+}
+.lb-tools button:hover{border-color:var(--lime);color:var(--lime)}
+.lb-tools button:disabled{opacity:.35;pointer-events:none}
+.lb-level{min-width:48px;text-align:center;color:var(--chalk)}
+.lb-close{margin-left:8px}
+@media (max-width:520px){.lb-hint{display:none}}
+
+/* ── colophon ────────────────────────────── */
+.colophon{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;
+  padding-block:clamp(20px,2.6vw,28px);
+  border-top:1px solid var(--hair);
+  font-family:var(--display);font-size:10px;font-weight:300;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);
+}
+.colophon a{color:var(--chalk);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:2px;transition:border-color .2s ease,color .2s ease}
+.colophon a:hover{color:var(--lime);border-color:var(--lime)}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="grain"></div>
+
+<header class="masthead">
+  <div class="brand">
+    <a class="mark" href="index.html">SOF</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a aria-current="page" href="shirts.html">Shirts</a>
+    </nav>
+  </div>
+  <span class="whereabouts">MoMo · <span>Ho Chi Minh City · Vietnam</span></span>
+</header>
+
+<main>
+  <section class="intro">
+    <p class="eyebrow">Internal collection</p>
+    <h1 class="title"><em>SOF</em> shirts, fall 2026</h1>
+    <p class="tagline">Three cuts, one crew. Pick a color, flip through the shots, <em>find your fit</em>.</p>
+  </section>
+
+  <section class="logos">
+    <p class="section-eyebrow">The print</p>
+    <div class="logo-grid">
+      <figure class="logo-card">
+        <button type="button" class="zoomable" aria-label="Enlarge front print"><img src="shirt-img-2026/dog-god.png" alt="Logo Dog God"></button>
+        <figcaption>Front</figcaption>
+      </figure>
+      <figure class="logo-card">
+        <button type="button" class="zoomable" aria-label="Enlarge back print"><img src="shirt-img-2026/logo-white.png" alt="Save Our Funds logo, white"></button>
+        <figcaption>Back</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="lookbook-section">
+    <p class="section-eyebrow">Pick your shirt</p>
+    <div class="lookbook" id="lookbook"></div>
+  </section>
+</main>
+
+<dialog class="lightbox" id="lightbox" aria-label="Image viewer">
+  <div class="lb-stage" id="lb-stage" tabindex="-1" autofocus><img class="lb-img" id="lb-img" alt="" draggable="false"></div>
+  <div class="lb-bar">
+    <span class="lb-caption"><b id="lb-caption"></b> <span class="lb-hint">· Scroll, pinch or double-click to zoom</span></span>
+    <div class="lb-tools">
+      <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
+      <span class="lb-level" id="lb-level" aria-live="polite">100%</span>
+      <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
+      <button type="button" data-zoom="reset">Fit</button>
+      <button type="button" class="lb-close" id="lb-close" aria-label="Close">✕</button>
+    </div>
+  </div>
+</dialog>
+
+<footer class="colophon">
+  <a href="index.html">← saveourfunds.dev</a>
+  <a href="https://github.com/kinhluan/saveourfunds.dev">Fork this page →</a>
+</footer>
+
+<script>
+(function () {
+  var IMG_DIR = 'shirt-img-2026/';
+
+  var PRODUCTS = [
+    {
+      key: 'thun', name: 'T-shirt',
+      colors: [
+        { name: 'Black', hex: '#161616', images: ['thun-den-2.png', 'thun-den-1.png', 'thun-den-4.png', 'thun-den-3.png'] },
+        { name: 'White', hex: '#F1F1EC', images: ['thun-trang-1.png', 'thun-trang-2.png', 'thun-trang-3.png', 'thun-trang-4.png'] },
+        { name: 'Navy', hex: '#1E2A44', images: ['thun-navi-2.png', 'thun-navi-1.png'] }
+      ]
+    },
+    {
+      key: 'polo', name: 'Polo',
+      colors: [
+        { name: 'Black', hex: '#161616', images: ['polo-den-2.png', 'polo-den-1.png'] },
+        { name: 'White', hex: '#F1F1EC', images: ['polo-trang-2.png', 'polo-trang-1.png'] }
+      ]
+    },
+    {
+      key: 'hoodie', name: 'Hoodie',
+      colors: [
+        { name: 'Black', hex: '#161616', images: ['hoodie-den-2.png', 'hoodie-den-1.png'] },
+        { name: 'White', hex: '#F1F1EC', images: ['hoodie-trang-2.png', 'hoodie-trang-1.png'] },
+        { name: 'Red', hex: '#B3241F', images: ['hoodie-do-2.png', 'hoodie-do-1.png'] }
+      ]
+    }
+  ];
+
+  var lookbook = document.getElementById('lookbook');
+
+  PRODUCTS.forEach(function (product) {
+    var state = { colorIndex: 0, imageIndex: 0 };
+
+    var article = document.createElement('article');
+    article.className = 'product';
+
+    var media = document.createElement('button');
+    media.type = 'button';
+    media.className = 'product-media zoomable';
+    media.addEventListener('click', function () { openLightbox(img.src, img.alt); });
+    var img = document.createElement('img');
+    img.className = 'product-image';
+    media.appendChild(img);
+
+    var body = document.createElement('div');
+    body.className = 'product-body';
+
+    var nameEl = document.createElement('h3');
+    nameEl.className = 'product-name';
+    nameEl.textContent = product.name;
+
+    var colorLabel = document.createElement('p');
+    colorLabel.className = 'product-color-label';
+
+    var swatches = document.createElement('div');
+    swatches.className = 'swatches';
+    swatches.setAttribute('role', 'group');
+    swatches.setAttribute('aria-label', 'Choose ' + product.name + ' color');
+
+    var swatchButtons = product.colors.map(function (color, i) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'swatch';
+      btn.style.setProperty('--sw', color.hex);
+      btn.setAttribute('aria-label', color.name);
+      btn.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+      btn.addEventListener('click', function () { selectColor(i); });
+      swatches.appendChild(btn);
+      return btn;
+    });
+
+    var thumbs = document.createElement('div');
+    thumbs.className = 'thumbs';
+    thumbs.setAttribute('role', 'group');
+    thumbs.setAttribute('aria-label', 'Choose photo');
+
+    body.appendChild(nameEl);
+    body.appendChild(colorLabel);
+    body.appendChild(swatches);
+    body.appendChild(thumbs);
+
+    article.appendChild(media);
+    article.appendChild(body);
+    lookbook.appendChild(article);
+
+    function renderThumbs() {
+      thumbs.innerHTML = '';
+      var color = product.colors[state.colorIndex];
+      color.images.forEach(function (file, i) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'thumb';
+        btn.setAttribute('aria-pressed', i === state.imageIndex ? 'true' : 'false');
+        btn.setAttribute('aria-label', product.name + ' ' + color.name + ', photo ' + (i + 1));
+        var thumbImg = document.createElement('img');
+        thumbImg.src = IMG_DIR + file;
+        thumbImg.alt = '';
+        thumbImg.loading = 'lazy';
+        btn.appendChild(thumbImg);
+        btn.addEventListener('click', function () { selectImage(i); });
+        thumbs.appendChild(btn);
+      });
+    }
+
+    function renderMain() {
+      var color = product.colors[state.colorIndex];
+      var file = color.images[state.imageIndex];
+      img.src = IMG_DIR + file;
+      img.alt = color.name + ' ' + product.name;
+      media.setAttribute('aria-label', 'Enlarge ' + img.alt + ', photo ' + (state.imageIndex + 1));
+      colorLabel.textContent = color.name;
+      swatchButtons.forEach(function (btn, i) {
+        btn.setAttribute('aria-pressed', i === state.colorIndex ? 'true' : 'false');
+      });
+    }
+
+    function selectColor(i) {
+      if (i === state.colorIndex) return;
+      state.colorIndex = i;
+      state.imageIndex = 0;
+      renderMain();
+      renderThumbs();
+    }
+
+    function selectImage(i) {
+      state.imageIndex = i;
+      renderMain();
+      [].slice.call(thumbs.children).forEach(function (btn, j) {
+        btn.setAttribute('aria-pressed', j === i ? 'true' : 'false');
+      });
+    }
+
+    renderMain();
+    renderThumbs();
+  });
+
+  [].slice.call(document.querySelectorAll('.logo-card .zoomable')).forEach(function (btn) {
+    var logo = btn.querySelector('img');
+    btn.addEventListener('click', function () { openLightbox(logo.src, logo.alt); });
+  });
+
+  // Lightbox: scale + translate on one image; pan is clamped so the image never leaves the stage.
+  var MIN = 1, MAX = 4, STEP = 1.5;
+  var dialog = document.getElementById('lightbox');
+  var stage = document.getElementById('lb-stage');
+  var lbImg = document.getElementById('lb-img');
+  var caption = document.getElementById('lb-caption');
+  var level = document.getElementById('lb-level');
+  var zoomOut = dialog.querySelector('[data-zoom="out"]');
+  var zoomIn = dialog.querySelector('[data-zoom="in"]');
+  var view = { s: 1, x: 0, y: 0 };
+  var pointers = new Map();
+  var drag = null, pinch = null, moved = false;
+
+  function openLightbox(src, alt) {
+    lbImg.src = src;
+    lbImg.alt = alt;
+    caption.textContent = alt;
+    setView(1, 0, 0, false);
+    document.documentElement.style.overflow = 'hidden';
+    dialog.showModal();
+  }
+
+  dialog.addEventListener('close', function () {
+    document.documentElement.style.overflow = '';
+    pointers.clear(); drag = pinch = null;
+  });
+  document.getElementById('lb-close').addEventListener('click', function () { dialog.close(); });
+
+  function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+
+  function setView(s, x, y, animate) {
+    s = clamp(s, MIN, MAX);
+    var maxX = Math.max(0, (lbImg.offsetWidth * s - stage.clientWidth) / 2);
+    var maxY = Math.max(0, (lbImg.offsetHeight * s - stage.clientHeight) / 2);
+    view.s = s;
+    view.x = s === 1 ? 0 : clamp(x, -maxX, maxX);
+    view.y = s === 1 ? 0 : clamp(y, -maxY, maxY);
+    lbImg.classList.toggle('is-animated', !!animate);
+    lbImg.style.transform = 'translate(' + view.x + 'px,' + view.y + 'px) scale(' + view.s + ')';
+    stage.classList.toggle('is-zoomed', s > 1);
+    level.textContent = Math.round(s * 100) + '%';
+    zoomOut.disabled = s <= MIN;
+    zoomIn.disabled = s >= MAX;
+  }
+
+  // Zoom about a point given in client coords (defaults to stage centre), keeping that point fixed.
+  function zoomTo(s, clientX, clientY, animate) {
+    var r = stage.getBoundingClientRect();
+    var px = clientX == null ? 0 : clientX - (r.left + r.width / 2);
+    var py = clientY == null ? 0 : clientY - (r.top + r.height / 2);
+    var ns = clamp(s, MIN, MAX), k = ns / view.s;
+    setView(ns, px - (px - view.x) * k, py - (py - view.y) * k, animate);
+  }
+
+  dialog.querySelector('.lb-tools').addEventListener('click', function (e) {
+    var action = e.target.closest('[data-zoom]');
+    if (!action) return;
+    var z = action.dataset.zoom;
+    if (z === 'in') zoomTo(view.s * STEP, null, null, true);
+    else if (z === 'out') zoomTo(view.s / STEP, null, null, true);
+    else setView(1, 0, 0, true);
+  });
+
+  stage.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    zoomTo(view.s * Math.exp(-e.deltaY * 0.0022), e.clientX, e.clientY, false);
+  }, { passive: false });
+
+  // Pointer capture retargets click/dblclick to the stage, so hit-test the image box directly.
+  function onImage(e) {
+    var r = lbImg.getBoundingClientRect();
+    return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+  }
+
+  stage.addEventListener('dblclick', function (e) {
+    if (!onImage(e)) return;
+    if (view.s > 1) setView(1, 0, 0, true);
+    else zoomTo(2.5, e.clientX, e.clientY, true);
+  });
+
+  stage.addEventListener('pointerdown', function (e) {
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    stage.setPointerCapture(e.pointerId);
+    moved = false;
+    if (pointers.size === 2) {
+      var p = [].slice.call(pointers.values());
+      pinch = { d: Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y), s: view.s };
+      drag = null;
+    } else if (pointers.size === 1 && view.s > 1) {
+      drag = { x: e.clientX - view.x, y: e.clientY - view.y };
+      stage.classList.add('is-dragging');
+    }
+  });
+
+  stage.addEventListener('pointermove', function (e) {
+    if (!pointers.has(e.pointerId)) return;
+    var prev = pointers.get(e.pointerId);
+    if (Math.abs(e.clientX - prev.x) + Math.abs(e.clientY - prev.y) > 3) moved = true;
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pinch && pointers.size === 2) {
+      var p = [].slice.call(pointers.values());
+      var d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+      zoomTo(pinch.s * d / pinch.d, (p[0].x + p[1].x) / 2, (p[0].y + p[1].y) / 2, false);
+    } else if (drag) {
+      setView(view.s, e.clientX - drag.x, e.clientY - drag.y, false);
+    }
+  });
+
+  function endPointer(e) {
+    pointers.delete(e.pointerId);
+    if (pointers.size < 2) pinch = null;
+    if (pointers.size === 0) { drag = null; stage.classList.remove('is-dragging'); }
+  }
+  stage.addEventListener('pointerup', endPointer);
+  stage.addEventListener('pointercancel', endPointer);
+
+  // Clicking the empty area around the image closes, unless that click ended a drag.
+  stage.addEventListener('click', function (e) {
+    if (!moved && !onImage(e)) dialog.close();
+  });
+
+  addEventListener('resize', function () { if (dialog.open) setView(view.s, view.x, view.y, false); });
+})();
+</script>
+</body>
+</html>
