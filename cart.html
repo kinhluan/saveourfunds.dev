@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your Cart — saveourfunds.dev</title>
+<meta name="description" content="The SOF team shirts you picked.">
+<meta name="theme-color" content="#C81E7E">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23C81E7E'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23E9C48C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Martian+Mono:wght@300;400;600&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#C81E7E;
+  --pink-hot:#E3238F;
+  --pink-deep:#8E0F57;
+  --tan:#E9C48C;
+  --ink:#1A1030;
+  --ink-soft:#5B4F6E;
+  --paper:#FFF4F9;
+  --white:#FFFFFF;
+  --chalk:#E9EDF2;
+  --ash:#9A93A8;
+  --lime:#D6FF3F;
+  --hair:rgba(233,237,242,.14);
+  --varsity:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --mono:"Martian Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --body:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --gutter:clamp(20px,5vw,72px);
+  --pop:4px 4px 0 var(--ink);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;min-height:100svh;display:flex;flex-direction:column;
+  background:var(--ink);color:var(--chalk);
+  font-family:var(--body);font-size:16px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--lime);outline-offset:3px;border-radius:4px}
+button{font:inherit;color:inherit}
+
+/* ── masthead (matches home) ─────────────── */
+.masthead{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:clamp(18px,2.4vw,26px) var(--gutter);background:var(--ink);
+}
+.brand{display:flex;align-items:center;gap:clamp(16px,2.6vw,28px)}
+.mark{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.22em;text-decoration:none}
+.mark::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lime)}
+.nav{display:flex;gap:clamp(14px,2vw,22px);padding-left:clamp(16px,2.6vw,28px);border-left:1px solid var(--hair);font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase}
+.nav a{color:var(--ash);text-decoration:none;padding-block:3px;border-bottom:1px solid transparent;transition:color .2s ease,border-color .2s ease}
+.nav a:hover{color:var(--chalk)}
+.nav a[aria-current="page"]{color:var(--chalk);border-color:var(--lime)}
+.whereabouts{font-family:var(--mono);font-size:10px;font-weight:300;letter-spacing:.2em;color:var(--ash);text-transform:uppercase;text-align:right}
+@media (max-width:520px){.whereabouts{display:none}}
+
+/* ── buttons (same as shirts) ────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:50px;padding:0 24px;border-radius:999px;cursor:pointer;
+  font-family:var(--varsity);font-weight:700;font-size:20px;letter-spacing:.02em;text-transform:uppercase;text-decoration:none;
+  border:2px solid var(--ink);box-shadow:var(--pop);
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn-pink{background:var(--pink);color:var(--white)}
+.btn-outline{background:var(--white);color:var(--ink)}
+
+/* ── cart page ───────────────────────────── */
+.page{flex:1;background:var(--paper);color:var(--ink);padding:clamp(48px,7vw,88px) var(--gutter) clamp(56px,8vw,104px)}
+.page-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:10px 32px;margin-bottom:clamp(28px,4vw,44px)}
+.page-title{
+  margin:0;font-family:var(--varsity);font-weight:900;text-transform:uppercase;
+  font-size:clamp(3rem,8vw,6rem);line-height:.86;
+}
+.page-note{margin:0;color:var(--ink-soft)}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,340px);align-items:start;gap:clamp(20px,3vw,40px)}
+@media (max-width:900px){.layout{grid-template-columns:1fr}}
+
+.items{margin:0;padding:0;list-style:none;display:grid;gap:clamp(16px,2vw,22px)}
+.item{
+  --accent:var(--pink);
+  display:grid;grid-template-columns:120px minmax(0,1fr) auto;gap:18px;align-items:center;
+  padding:12px 20px 12px 12px;
+  background:var(--white);border:2px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--accent);
+}
+.item-img{display:block;width:120px;height:120px;border-radius:12px;object-fit:cover;background:#F4F2F0}
+.item-name{margin:0;font-family:var(--varsity);font-weight:900;font-size:clamp(1.7rem,2.6vw,2.1rem);line-height:.95;text-transform:uppercase}
+.specs{margin:8px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.specs li{padding:2px 10px;border-radius:999px;background:var(--paper);border:1px solid rgba(26,16,48,.18);font-size:13px;font-weight:600}
+.specs .sleeve{background:var(--tan);border-color:var(--ink)}
+.item-controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:12px}
+.stepper{display:inline-flex;align-items:center;border:2px solid var(--ink);border-radius:999px;background:var(--white)}
+.stepper button{
+  width:36px;height:34px;padding:0;border:0;background:none;cursor:pointer;
+  font-family:var(--varsity);font-weight:900;font-size:22px;line-height:1;color:var(--ink);border-radius:999px;
+}
+.stepper button:hover{background:var(--paper)}
+.stepper button:disabled{opacity:.3;cursor:not-allowed;background:none}
+.stepper output{min-width:28px;text-align:center;font-family:var(--varsity);font-weight:900;font-size:20px;font-variant-numeric:tabular-nums}
+.remove{
+  padding:4px 2px;border:0;background:none;cursor:pointer;
+  font-size:14px;font-weight:600;color:var(--ink-soft);text-decoration:underline;text-underline-offset:3px;
+}
+.remove:hover{color:var(--pink)}
+.item-total{text-align:right}
+.item-total b{display:block;font-family:var(--varsity);font-weight:900;font-size:clamp(1.6rem,2.4vw,1.9rem);line-height:1}
+.item-total span{font-size:13px;color:var(--ink-soft);white-space:nowrap}
+@media (max-width:560px){
+  .item{grid-template-columns:88px minmax(0,1fr);padding-right:14px}
+  .item-img{width:88px;height:88px}
+  .item-total{grid-column:1 / -1;display:flex;align-items:baseline;justify-content:space-between;padding:10px 4px 2px;border-top:1px dashed rgba(26,16,48,.2);text-align:left}
+}
+
+.summary{
+  position:sticky;top:24px;
+  padding:22px;border:2px solid var(--ink);border-radius:22px;background:var(--white);box-shadow:8px 8px 0 var(--ink);
+}
+.summary h2{margin:0 0 14px;font-family:var(--varsity);font-weight:900;font-size:30px;line-height:1;text-transform:uppercase}
+.summary dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:8px 0}
+.summary dt{color:var(--ink-soft)}
+.summary dd{margin:0;padding-left:12px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.summary .total{margin-top:8px;padding-top:12px;border-top:2px solid var(--ink);color:var(--ink);font-weight:600}
+.summary dd.total b{font-family:var(--varsity);font-weight:900;font-size:34px;line-height:1}
+.summary dd.total b + span{font-size:12px;letter-spacing:.06em;color:var(--ink-soft)}
+.summary .btn{width:100%;margin-top:20px}
+.summary .btn + .btn{margin-top:12px}
+.summary-note{margin:12px 0 0;font-size:14px;color:var(--ink-soft)}
+
+.empty{
+  display:grid;justify-items:center;gap:6px;max-width:520px;margin:0 auto;padding:clamp(28px,4vw,44px);
+  text-align:center;background:var(--white);border:2px solid var(--ink);border-radius:24px;box-shadow:8px 8px 0 var(--pink);
+}
+.empty img{width:min(200px,50vw);height:auto;margin-bottom:6px}
+.empty h2{margin:0;font-family:var(--varsity);font-weight:900;font-size:clamp(2rem,4vw,2.8rem);line-height:.95;text-transform:uppercase}
+.empty p{margin:0 0 14px;color:var(--ink-soft)}
+[hidden]{display:none !important}
+
+/* ── request popup ───────────────────────── */
+.request{
+  padding:0;margin:auto;
+  width:min(calc(100vw - 32px),520px);max-width:none;max-height:calc(100dvh - 32px);
+  border:2px solid var(--ink);border-radius:24px;overflow:auto;overscroll-behavior:contain;
+  background:var(--paper);color:var(--ink);box-shadow:8px 8px 0 var(--pink);
+}
+.request::backdrop{background:rgba(26,16,48,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.request[open]{animation:pop-in .24s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop-in{from{opacity:0;transform:translateY(10px) scale(.97)}}
+@media (prefers-reduced-motion:reduce){.request[open]{animation:none}}
+.request-inner{outline:none;position:relative;padding:22px 22px 24px}
+.request h2{margin:0 44px 16px 0;font-family:var(--varsity);font-weight:900;font-size:32px;line-height:.95;text-transform:uppercase}
+.request h2:focus{outline:none}
+.request-close{
+  position:absolute;top:16px;right:16px;width:38px;height:38px;padding:0;border-radius:50%;cursor:pointer;
+  border:2px solid var(--ink);background:var(--white);font-size:15px;color:var(--ink);
+}
+.request-close:hover{background:var(--tan)}
+
+.review{margin:0;padding:6px 14px;list-style:none;border:2px solid var(--ink);border-radius:16px;background:var(--white)}
+.review li{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px 0}
+.review li + li{border-top:1px dashed rgba(26,16,48,.2)}
+.review img{width:48px;height:48px;border-radius:8px;object-fit:cover;background:#F4F2F0}
+.review-name{margin:0;font-weight:600;line-height:1.3}
+.review-meta{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.35}
+.review-total{font-family:var(--varsity);font-weight:900;font-size:20px;white-space:nowrap}
+.review-sum{display:flex;justify-content:space-between;align-items:baseline;margin:12px 4px 0;font-weight:600}
+.review-sum b{font-family:var(--varsity);font-weight:900;font-size:28px}
+.review-sum b + span{font-size:12px;letter-spacing:.06em;color:var(--ink-soft)}
+
+.fields{display:grid;gap:14px;margin-top:20px}
+.field label{display:block;margin-bottom:6px;font-weight:600}
+.field input{
+  display:block;width:100%;padding:11px 14px;border-radius:12px;
+  border:2px solid rgba(26,16,48,.25);background:var(--white);color:var(--ink);font:inherit;
+}
+.field input{min-height:48px}
+.field input::placeholder{color:#B8AFC4}
+.field input:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px var(--lime)}
+.field [aria-invalid="true"]{border-color:var(--pink)}
+.field-error{margin:6px 0 0;font-size:14px;font-weight:600;color:var(--pink)}
+.request-actions{display:flex;flex-direction:column;gap:12px;margin-top:22px}
+.request-actions .btn{width:100%}
+.btn:disabled{cursor:progress;opacity:.7;transform:none}
+
+.pay{text-align:center}
+.pay-success{
+  display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:center;
+  margin:0 48px 22px 0;padding:14px 16px;text-align:left;
+  border:2px solid var(--ink);border-radius:16px;background:var(--lime);box-shadow:4px 4px 0 var(--ink);
+}
+.pay-success svg{width:44px;height:44px}
+.pay-success h2{margin:0;font-size:28px}
+.pay-success p{margin:2px 0 0;font-size:15px;line-height:1.4}
+.pay-step{margin:0 0 6px;font-family:var(--varsity);font-weight:900;font-size:26px;line-height:1;text-transform:uppercase}
+.pay-lede{margin:0 0 16px;color:var(--ink-soft)}
+.pay-lede b{color:var(--ink)}
+.pay-qr{display:block;width:min(100%,320px);height:auto;margin:0 auto;border:2px solid var(--ink);border-radius:18px;background:var(--white)}
+.pay-facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;margin:18px 0 0;padding:14px 16px;text-align:left;border:2px solid var(--ink);border-radius:16px;background:var(--white)}
+.pay-facts dt{color:var(--ink-soft)}
+.pay-facts dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.pay-facts .amount{font-family:var(--varsity);font-weight:900;font-size:24px;line-height:1.1}
+
+/* ── colophon ────────────────────────────── */
+.colophon{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;
+  padding:clamp(20px,2.6vw,28px) var(--gutter);background:var(--ink);
+  font-family:var(--mono);font-size:10px;font-weight:300;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);
+}
+.colophon a{color:var(--chalk);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:2px;transition:border-color .2s ease,color .2s ease}
+.colophon a:hover{color:var(--lime);border-color:var(--lime)}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="brand">
+    <a class="mark" href="index.html">SOF</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="shirts.html">Shirts</a>
+    </nav>
+  </div>
+  <span class="whereabouts">MoMo · <span>Ho Chi Minh City · Vietnam</span></span>
+</header>
+
+<main class="page">
+  <div class="page-head">
+    <h1 class="page-title">Your cart</h1>
+    <p class="page-note" id="page-note" aria-live="polite"></p>
+  </div>
+
+  <div class="layout" id="layout" hidden>
+    <ul class="items" id="items"></ul>
+    <aside class="summary" aria-labelledby="summary-title">
+      <h2 id="summary-title">Summary</h2>
+      <dl>
+        <dt>Items</dt><dd id="sum-count">0</dd>
+        <dt class="total">Total</dt><dd class="total" id="sum-total"></dd>
+      </dl>
+      <button type="button" class="btn btn-pink" id="open-request">Send request</button>
+      <a class="btn btn-outline" href="shirts.html#shop">Keep shopping</a>
+      <p class="summary-note">Your cart is saved in this browser only.</p>
+    </aside>
+  </div>
+
+  <div class="empty" id="empty" hidden>
+    <img src="shirt-img-2026/dog-god.png" alt="" width="1254" height="1254">
+    <h2>Your cart is empty</h2>
+    <p>Pick a cut, a color and a size, and it will show up here.</p>
+    <a class="btn btn-pink" href="shirts.html#shop">Pick your shirt</a>
+  </div>
+</main>
+
+<dialog class="request" id="request" aria-labelledby="request-title">
+  <div class="request-inner" tabindex="-1" autofocus>
+    <button type="button" class="request-close" id="request-close" aria-label="Close">✕</button>
+
+    <form id="request-form" novalidate>
+      <h2 id="request-title">Send your request</h2>
+      <ul class="review" id="review"></ul>
+      <p class="review-sum">Total <span id="review-total"></span></p>
+
+      <div class="fields">
+        <div class="field">
+          <label for="req-name">Your name</label>
+          <input id="req-name" name="name" type="text" autocomplete="name" maxlength="60" required aria-describedby="req-name-error">
+          <p class="field-error" id="req-name-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="req-phone">Phone number</label>
+          <input id="req-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="0901 234 567" required aria-describedby="req-phone-error">
+          <p class="field-error" id="req-phone-error" hidden></p>
+        </div>
+      </div>
+
+      <div class="request-actions">
+        <button type="submit" class="btn btn-pink" id="request-submit">Submit request</button>
+      </div>
+    </form>
+
+    <div class="pay" id="pay" hidden>
+      <div class="pay-success" role="status">
+        <svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20" fill="#1A1030"/><path d="M13 22.5l6 6 12-13" fill="none" stroke="#D6FF3F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div>
+          <h2 id="pay-title" tabindex="-1">Request sent</h2>
+          <p id="pay-summary"></p>
+        </div>
+      </div>
+      <p class="pay-step">Now scan to pay</p>
+      <p class="pay-lede">Scan the QR with MoMo or any banking app to pay <b id="pay-amount-lede"></b>.</p>
+      <img class="pay-qr" src="shirt-img-2026/momo-shirt-fund-qr.jpg" alt="MoMo QR code for the SOF shirt fund, accepts VietQR and Napas 247" width="741" height="968" loading="lazy">
+      <dl class="pay-facts">
+        <dt>Amount</dt><dd class="amount" id="pay-amount"></dd>
+        <dt>Transfer note</dt><dd id="pay-note"></dd>
+      </dl>
+      <div class="request-actions">
+        <a class="btn btn-outline" href="shirt-img-2026/momo-shirt-fund-qr.jpg" download="sof-shirt-fund-qr.jpg">Save the QR</a>
+        <button type="button" class="btn btn-pink" id="pay-done">Done</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<footer class="colophon">
+  <a href="shirts.html">← Back to the shirts</a>
+  <a href="https://github.com/kinhluan/saveourfunds.dev">Fork this page →</a>
+</footer>
+
+<script>
+(function () {
+  // Same key and item shape that shirts.html writes: { id, key, name, color, size, sleeve, price, image, qty }.
+  var CART_KEY = 'sof-cart-v1';
+  var ACCENTS = { thun: '#C81E7E', polo: '#E9C48C', hoodie: '#B3241F' };
+  var MAX_QTY = 20;
+
+  var list = document.getElementById('items');
+  var layout = document.getElementById('layout');
+  var empty = document.getElementById('empty');
+  var note = document.getElementById('page-note');
+  var sumCount = document.getElementById('sum-count');
+  var sumTotal = document.getElementById('sum-total');
+
+  function readCart() {
+    try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch (e) { return []; }
+  }
+  function writeCart(items) {
+    try { localStorage.setItem(CART_KEY, JSON.stringify(items)); } catch (e) {}
+  }
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text != null) node.textContent = text;
+    return node;
+  }
+
+  function money(k) { return k.toLocaleString('en-US') + 'k'; }
+
+  function priceNode(k) {
+    var wrap = el('span');
+    wrap.appendChild(el('b', null, money(k)));
+    wrap.appendChild(el('span', null, ' VND'));
+    return wrap;
+  }
+
+  // Re-rendering drops focus, so put it back on the same control (or the next item's, after a remove).
+  function update(id, change) {
+    var items = readCart();
+    var index = items.findIndex(function (it) { return it.id === id; });
+    if (index < 0) return;
+    var act = change === 'remove' ? 'remove' : change > 0 ? 'plus' : 'minus';
+    if (change === 'remove') items.splice(index, 1);
+    else items[index].qty = Math.min(MAX_QTY, Math.max(1, items[index].qty + change));
+    writeCart(items);
+    render();
+    var target = change === 'remove'
+      ? (items[index] || items[index - 1])
+      : items[index];
+    var node = target && list.querySelector('[data-id="' + target.id + '"][data-act="' + (change === 'remove' ? 'remove' : act) + '"]');
+    if (node && node.disabled) node = list.querySelector('[data-id="' + target.id + '"][data-act="' + (act === 'plus' ? 'minus' : 'plus') + '"]');
+    (node || document.querySelector(items.length ? '.summary .btn' : '.empty .btn')).focus();
+  }
+
+  function renderItem(item) {
+    var li = el('li', 'item');
+    li.style.setProperty('--accent', ACCENTS[item.key] || ACCENTS.thun);
+
+    var img = el('img', 'item-img');
+    img.src = item.image;
+    img.alt = item.color + ' ' + item.name;
+
+    var info = el('div');
+    info.appendChild(el('h2', 'item-name', item.name));
+    var specs = el('ul', 'specs');
+    specs.appendChild(el('li', null, item.color));
+    specs.appendChild(el('li', null, 'Size ' + item.size));
+    specs.appendChild(item.sleeve ? el('li', 'sleeve', 'Sleeve: “' + item.sleeve + '”') : el('li', null, 'Plain sleeve'));
+    info.appendChild(specs);
+
+    var controls = el('div', 'item-controls');
+    var stepper = el('div', 'stepper');
+    stepper.setAttribute('role', 'group');
+    stepper.setAttribute('aria-label', 'Quantity');
+    var minus = el('button', null, '−');
+    minus.type = 'button';
+    minus.setAttribute('aria-label', 'One less');
+    minus.disabled = item.qty <= 1;
+    minus.dataset.id = item.id; minus.dataset.act = 'minus';
+    minus.addEventListener('click', function () { update(item.id, -1); });
+    var qty = el('output', null, String(item.qty));
+    qty.setAttribute('aria-live', 'polite');
+    var plus = el('button', null, '+');
+    plus.type = 'button';
+    plus.setAttribute('aria-label', 'One more');
+    plus.disabled = item.qty >= MAX_QTY;
+    plus.dataset.id = item.id; plus.dataset.act = 'plus';
+    plus.addEventListener('click', function () { update(item.id, 1); });
+    stepper.appendChild(minus); stepper.appendChild(qty); stepper.appendChild(plus);
+
+    var remove = el('button', 'remove', 'Remove');
+    remove.type = 'button';
+    remove.dataset.id = item.id; remove.dataset.act = 'remove';
+    remove.setAttribute('aria-label', 'Remove ' + item.color + ' ' + item.name + ', size ' + item.size);
+    remove.addEventListener('click', function () { update(item.id, 'remove'); });
+    controls.appendChild(stepper); controls.appendChild(remove);
+    info.appendChild(controls);
+
+    var total = el('div', 'item-total');
+    total.appendChild(el('b', null, money(item.price * item.qty)));
+    total.appendChild(el('span', null, money(item.price) + ' VND each'));
+
+    li.appendChild(img); li.appendChild(info); li.appendChild(total);
+    return li;
+  }
+
+  function render() {
+    var items = readCart();
+    var count = items.reduce(function (n, it) { return n + it.qty; }, 0);
+    var total = items.reduce(function (n, it) { return n + it.price * it.qty; }, 0);
+
+    layout.hidden = count === 0;
+    empty.hidden = count !== 0;
+    note.textContent = count === 0 ? '' : count + (count === 1 ? ' item' : ' items') + ' picked';
+
+    list.innerHTML = '';
+    items.forEach(function (item) { list.appendChild(renderItem(item)); });
+    sumCount.textContent = count;
+    sumTotal.innerHTML = '';
+    sumTotal.appendChild(priceNode(total));
+  }
+
+  // ── Send request ───────────────────────────
+  var dialog = document.getElementById('request');
+  var form = document.getElementById('request-form');
+  var pay = document.getElementById('pay');
+  var review = document.getElementById('review');
+  var reviewTotal = document.getElementById('review-total');
+  var nameInput = document.getElementById('req-name');
+  var phoneInput = document.getElementById('req-phone');
+  var submitBtn = document.getElementById('request-submit');
+
+  // Apps Script web app bound to the order sheet (source: apps-script/Code.gs). It writes one row per
+  // shirt and numbers them. Leave empty to skip sending while testing the page.
+  var SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbykeSo67Fa-e7sLyn345msMi0gc89jEVWW_cbSEPiJiV0A7Sxg5W7BV7lljoY0oRyg-/exec';
+
+  // Apps Script runs doPost, then 302s to a googleusercontent URL holding the reply. That second hop
+  // can hang or 404 on some networks even though the rows are already written, so the redirect is
+  // not followed: getting it back means the script ran. Text/plain body avoids a CORS preflight.
+  // The page validates the same rules as the script, so a silent rejection there is not expected.
+  function submitRequest(request) {
+    if (!SHEET_ENDPOINT) {
+      console.warn('SHEET_ENDPOINT is empty; request not sent.', request);
+      return Promise.resolve();
+    }
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, 20000);
+    return fetch(SHEET_ENDPOINT, { method: 'POST', body: JSON.stringify(request), redirect: 'manual', signal: controller.signal })
+      .then(function (res) {
+        if (res.type === 'opaqueredirect') return;
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json().then(function (reply) { if (!reply.ok) throw new Error(reply.error || 'Rejected'); });
+      })
+      .finally(function () { clearTimeout(timer); });
+  }
+
+  // Retrying the same order reuses its id, so the script can skip rows it already wrote.
+  var pending = { signature: '', id: '' };
+  function requestId(request) {
+    var signature = JSON.stringify([request.name, request.phone, request.items]);
+    if (pending.signature !== signature) {
+      pending = { signature: signature, id: Date.now().toString(36) + Math.random().toString(36).slice(2, 10) };
+    }
+    return pending.id;
+  }
+
+  // Bank apps often drop or garble Vietnamese diacritics in transfer notes.
+  function plainText(value) {
+    return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
+  }
+
+  function cartTotal(items) { return items.reduce(function (n, it) { return n + it.price * it.qty; }, 0); }
+
+  function renderReview(items) {
+    review.innerHTML = '';
+    items.forEach(function (item) {
+      var li = el('li');
+      var img = el('img');
+      img.src = item.image;
+      img.alt = '';
+      var text = el('div');
+      text.appendChild(el('p', 'review-name', item.qty + ' × ' + item.name));
+      text.appendChild(el('p', 'review-meta', [item.color, 'Size ' + item.size, item.sleeve ? 'Sleeve “' + item.sleeve + '”' : 'Plain sleeve'].join(' · ')));
+      li.appendChild(img); li.appendChild(text);
+      li.appendChild(el('span', 'review-total', money(item.price * item.qty)));
+      review.appendChild(li);
+    });
+    reviewTotal.innerHTML = '';
+    reviewTotal.appendChild(priceNode(cartTotal(items)));
+  }
+
+  function normalizePhone(value) { return value.replace(/[\s.\-()]/g, ''); }
+  // Vietnamese mobile: 0 + 9 digits, or +84 / 84 + 9 digits.
+  function isValidPhone(value) { return /^(0|\+?84)[1-9]\d{8}$/.test(normalizePhone(value)); }
+
+  function setError(input, message) {
+    var error = document.getElementById(input.id + '-error');
+    input.setAttribute('aria-invalid', message ? 'true' : 'false');
+    error.textContent = message || '';
+    error.hidden = !message;
+  }
+
+  function validate() {
+    var nameMsg = nameInput.value.trim() ? '' : 'Please enter your name.';
+    var phoneMsg = !phoneInput.value.trim() ? 'Please enter your phone number.'
+      : isValidPhone(phoneInput.value) ? '' : 'That doesn’t look like a phone number. Try 0901 234 567.';
+    setError(nameInput, nameMsg);
+    setError(phoneInput, phoneMsg);
+    var firstBad = nameMsg ? nameInput : phoneMsg ? phoneInput : null;
+    if (firstBad) firstBad.focus();
+    return !firstBad;
+  }
+
+  [nameInput, phoneInput].forEach(function (input) {
+    input.addEventListener('input', function () {
+      if (input.getAttribute('aria-invalid') === 'true') setError(input, '');
+    });
+  });
+
+  function openRequest() {
+    var items = readCart();
+    if (!items.length) return;
+    renderReview(items);
+    form.hidden = false;
+    pay.hidden = true;
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit request';
+    document.documentElement.style.overflow = 'hidden';
+    dialog.showModal();
+    dialog.scrollTop = 0;
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!validate()) return;
+    var items = readCart();
+    var total = cartTotal(items);
+    var request = {
+      name: nameInput.value.trim(),
+      phone: normalizePhone(phoneInput.value),
+      items: items.map(function (it) {
+        return { key: it.key, color: it.color, size: it.size, sleeve: it.sleeve, qty: it.qty };
+      })
+    };
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    request.requestId = requestId(request);
+    submitRequest(request).then(function () {
+      pending = { signature: '', id: '' };
+      writeCart([]);
+      render();
+      document.getElementById('pay-amount-lede').textContent = money(total) + ' VND';
+      document.getElementById('pay-amount').textContent = money(total) + ' VND';
+      document.getElementById('pay-note').textContent = 'Ao SOF ' + plainText(request.name);
+      var shirts = items.reduce(function (n, it) { return n + it.qty; }, 0);
+      document.getElementById('pay-summary').textContent = 'Thanks, ' + request.name + '. Your ' + shirts +
+        (shirts === 1 ? ' shirt is' : ' shirts are') + ' on the order list under ' + phoneInput.value.trim() + '.';
+      form.hidden = true;
+      pay.hidden = false;
+      dialog.scrollTop = 0;
+      document.getElementById('pay-title').focus();
+    }, function () {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit request';
+      alert('Could not send your request. Please try again.');
+    });
+  });
+
+  document.getElementById('open-request').addEventListener('click', openRequest);
+  document.getElementById('request-close').addEventListener('click', function () { dialog.close(); });
+  document.getElementById('pay-done').addEventListener('click', function () { dialog.close(); });
+  dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
+  dialog.addEventListener('close', function () { document.documentElement.style.overflow = ''; });
+
+  render();
+  // Stay in sync with the shirts page open in another tab, and after back/forward cache restores.
+  addEventListener('storage', function (e) { if (e.key === CART_KEY) render(); });
+  addEventListener('pageshow', function (e) { if (e.persisted) render(); });
+})();
+</script>
+</body>
+</html>
