@@ -176,6 +176,10 @@ button{font:inherit;color:inherit}
 .product-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
 .product-name{margin:0;font-family:var(--varsity);font-weight:900;font-size:clamp(2rem,3vw,2.5rem);line-height:.95;text-transform:uppercase}
 .product-color-label{margin:0;font-weight:600;color:var(--ink-soft);white-space:nowrap}
+.product-price{margin:8px 0 0;display:flex;align-items:baseline;gap:6px;color:var(--ink)}
+.product-price b{font-family:var(--varsity);font-weight:900;font-size:clamp(1.6rem,2.4vw,1.9rem);line-height:1}
+.product-price span{font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--ink-soft)}
+.product-price.is-soon{align-self:flex-start;padding:5px 12px;border:2px solid var(--ink);border-radius:999px;background:var(--tan);font-weight:600;font-size:14px}
 .product-blurb{margin:6px 0 14px;color:var(--ink-soft);font-size:15px}
 
 .thumbs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
@@ -215,6 +219,7 @@ button{font:inherit;color:inherit}
 
 .product-cta{margin-top:auto;padding-top:6px}
 .product-cta .btn{width:100%}
+.product-cta .btn:disabled{cursor:not-allowed;background:#E7E2EA;color:var(--ink-soft);border-color:rgba(26,16,48,.3);box-shadow:none;transform:none}
 
 /* ── the print (dark section) ────────────── */
 .print{padding:clamp(56px,8vw,104px) var(--gutter);background:var(--ink);color:var(--white)}
@@ -285,6 +290,66 @@ button{font:inherit;color:inherit}
   transition:opacity .2s ease,transform .2s ease;
 }
 .toast.show{opacity:1;transform:none}
+
+/* ── sticky cart button ──────────────────── */
+.cart-fab{
+  position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:15;
+  display:inline-flex;align-items:center;gap:10px;
+  min-height:52px;padding:0 18px 0 14px;border-radius:999px;
+  border:2px solid var(--ink);background:var(--tan);color:var(--ink);box-shadow:var(--pop);
+  font-family:var(--varsity);font-weight:900;font-size:20px;text-transform:uppercase;letter-spacing:.02em;text-decoration:none;
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.cart-fab:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.cart-fab:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.cart-fab svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cart-fab-count{
+  display:grid;place-items:center;min-width:26px;height:26px;padding:0 7px;border-radius:999px;
+  background:var(--pink);color:var(--white);font-size:16px;line-height:1;
+}
+.cart-fab-count[data-empty]{background:var(--ink)}
+.cart-fab.bump{animation:bump .4s ease}
+@keyframes bump{30%{transform:scale(1.12) rotate(-3deg)}60%{transform:scale(.96)}}
+@media (prefers-reduced-motion:reduce){.cart-fab.bump{animation:none}}
+@media (max-width:520px){.toast{bottom:max(84px,calc(env(safe-area-inset-bottom) + 68px))}}
+
+/* ── cart popup ──────────────────────────── */
+.cart{
+  padding:0;margin:auto;
+  width:min(calc(100vw - 32px),460px);max-width:none;max-height:calc(100dvh - 32px);
+  border:2px solid var(--ink);border-radius:24px;
+  background:var(--paper);color:var(--ink);box-shadow:8px 8px 0 var(--pink);
+}
+.cart::backdrop{background:rgba(26,16,48,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.cart[open]{animation:lb-in .24s cubic-bezier(.2,.8,.2,1)}
+@media (prefers-reduced-motion:reduce){.cart[open]{animation:none}}
+.cart-inner{outline:none;position:relative;padding:22px 22px 24px}
+.cart-title{margin:0 44px 18px 0;font-family:var(--varsity);font-weight:900;font-size:32px;line-height:.95;text-transform:uppercase}
+.cart-close{
+  position:absolute;top:16px;right:16px;width:38px;height:38px;padding:0;border-radius:50%;cursor:pointer;
+  border:2px solid var(--ink);background:var(--white);font-size:15px;color:var(--ink);
+}
+.cart-close:hover{background:var(--tan)}
+.cart-item{display:grid;grid-template-columns:92px minmax(0,1fr);gap:16px;align-items:center;padding:12px;border:2px solid var(--ink);border-radius:16px;background:var(--white)}
+.cart-item img{display:block;width:92px;height:92px;border-radius:10px;object-fit:cover;background:#F4F2F0}
+.cart-name{margin:0;font-family:var(--varsity);font-weight:900;font-size:26px;line-height:1;text-transform:uppercase}
+.cart-specs{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+.cart-specs li{padding:2px 10px;border-radius:999px;background:var(--paper);border:1px solid rgba(26,16,48,.18);font-size:13px;font-weight:600}
+.cart-price{margin:8px 0 0;font-family:var(--varsity);font-weight:900;font-size:22px;line-height:1}
+.cart-price span{font-family:var(--body);font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--ink-soft)}
+.cart-field{display:block;margin-top:20px}
+.cart-field-label{display:block;font-weight:600}
+.cart-field-hint{display:block;margin:2px 0 8px;font-size:14px;color:var(--ink-soft)}
+.cart-input-wrap{position:relative}
+.cart-input{
+  width:100%;min-height:48px;padding:0 64px 0 14px;border-radius:12px;
+  border:2px solid rgba(26,16,48,.25);background:var(--white);color:var(--ink);
+  font-family:var(--varsity);font-weight:700;font-size:21px;letter-spacing:.03em;
+}
+.cart-input::placeholder{color:#B8AFC4}
+.cart-input:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px var(--lime)}
+.cart-count{position:absolute;right:14px;top:50%;translate:0 -50%;font-size:13px;font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+.cart-done{width:100%;margin-top:22px}
 
 /* ── lightbox ────────────────────────────── */
 /* Centered card, not full screen: the stage never grows past what the photos can fill sharply. */
@@ -412,7 +477,7 @@ button{font:inherit;color:inherit}
   <section class="shop" id="shop" aria-labelledby="shop-title">
     <div class="section-head">
       <h2 class="section-title" id="shop-title">Pick your shirt</h2>
-      <p class="section-note">Choose a color and size, then copy your pick. Paste it in the team order thread.</p>
+      <p class="section-note">Choose a color and size, then add it to your cart.</p>
     </div>
     <div class="lookbook" id="lookbook"></div>
   </section>
@@ -462,7 +527,36 @@ button{font:inherit;color:inherit}
   </section>
 </main>
 
+<a class="cart-fab" id="cart-fab" href="cart.html" aria-label="View cart">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+  Cart <span class="cart-fab-count" id="cart-fab-count">0</span>
+</a>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<dialog class="cart" id="cart" aria-labelledby="cart-title">
+  <div class="cart-inner" tabindex="-1" autofocus>
+    <h2 class="cart-title" id="cart-title">Your pick</h2>
+    <button type="button" class="cart-close" id="cart-close" aria-label="Close">✕</button>
+    <div class="cart-item">
+      <img id="cart-img" alt="">
+      <div>
+        <p class="cart-name" id="cart-name"></p>
+        <ul class="cart-specs" id="cart-specs"></ul>
+        <p class="cart-price" id="cart-price"></p>
+      </div>
+    </div>
+    <label class="cart-field" for="cart-sleeve">
+      <span class="cart-field-label">Custom text on the sleeve?</span>
+      <span class="cart-field-hint">Optional. Your name, a nickname, anything. Leave it blank for a plain sleeve.</span>
+      <span class="cart-input-wrap">
+        <input class="cart-input" id="cart-sleeve" type="text" maxlength="12" autocomplete="off" spellcheck="false" placeholder="e.g. Kemmie" aria-describedby="cart-count">
+        <span class="cart-count" id="cart-count">0/12</span>
+      </span>
+    </label>
+    <button type="button" class="btn btn-pink cart-done" id="cart-done">Add to cart</button>
+  </div>
+</dialog>
 
 <dialog class="lightbox" id="lightbox" aria-label="Image viewer">
   <button type="button" class="lb-close" id="lb-close" aria-label="Close">✕</button>
@@ -489,9 +583,10 @@ button{font:inherit;color:inherit}
   var SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
 
   // accent = card's offset shadow; sticker = playful tag over the photo.
+  // price is in thousand VND; opensIn replaces it for a cut that is not on sale yet.
   var PRODUCTS = [
     {
-      key: 'thun', name: 'T-shirt', sticker: 'Everyday', accent: '#C81E7E',
+      key: 'thun', name: 'T-shirt', sticker: 'Everyday', accent: '#C81E7E', price: 215,
       blurb: 'Crew neck, easy fit. The one you will wear most.',
       colors: [
         { name: 'Black', hex: '#161616', images: ['thun-den-2.png', 'thun-den-1.png', 'thun-den-4.png', 'thun-den-3.png'] },
@@ -500,7 +595,7 @@ button{font:inherit;color:inherit}
       ]
     },
     {
-      key: 'polo', name: 'Polo', sticker: 'Meeting-ready', accent: '#E9C48C',
+      key: 'polo', name: 'Polo', sticker: 'Meeting-ready', accent: '#E9C48C', price: 305,
       blurb: 'Collar on, still comfy. Good for demo day.',
       colors: [
         { name: 'Black', hex: '#161616', images: ['polo-den-2.png', 'polo-den-1.png'] },
@@ -508,7 +603,7 @@ button{font:inherit;color:inherit}
       ]
     },
     {
-      key: 'hoodie', name: 'Hoodie', sticker: 'Cold office', accent: '#B3241F',
+      key: 'hoodie', name: 'Hoodie', sticker: 'Cold office', accent: '#B3241F', opensIn: 'November',
       blurb: 'Heavy fleece with a hood, for the air-con on floor 6.',
       colors: [
         { name: 'Black', hex: '#161616', images: ['hoodie-den-2.png', 'hoodie-den-1.png'] },
@@ -536,22 +631,97 @@ button{font:inherit;color:inherit}
     toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 3200);
   }
 
-  // The line a member pastes into the order thread.
-  function formatPick(product, color, size) {
-    return product.name + ' / ' + color.name + ' / ' + size;
+  // Cart storage, shared with cart.html. Identical lines (same cut, color, size, sleeve) merge into one with qty.
+  var CART_KEY = 'sof-cart-v1';
+  function readCart() {
+    try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch (e) { return []; }
+  }
+  function writeCart(items) {
+    try { localStorage.setItem(CART_KEY, JSON.stringify(items)); return true; } catch (e) { return false; }
+  }
+  function addToStoredCart(item) {
+    var items = readCart();
+    var same = items.filter(function (it) {
+      return it.key === item.key && it.color === item.color && it.size === item.size && it.sleeve === item.sleeve;
+    })[0];
+    if (same) same.qty += 1;
+    else items.push(Object.assign({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), qty: 1 }, item));
+    return writeCart(items);
   }
 
-  // Falls back after 1.5s: a pending permission prompt can leave writeText unsettled.
-  function copyText(text) {
-    if (!navigator.clipboard || !window.isSecureContext) return Promise.reject(new Error('Clipboard unavailable'));
-    return Promise.race([
-      navigator.clipboard.writeText(text),
-      new Promise(function (_, reject) { setTimeout(function () { reject(new Error('Clipboard timeout')); }, 1500); })
-    ]);
+  var fab = document.getElementById('cart-fab');
+  var fabCount = document.getElementById('cart-fab-count');
+  function renderFab(bump) {
+    var n = readCart().reduce(function (sum, it) { return sum + it.qty; }, 0);
+    fabCount.textContent = n;
+    fabCount.toggleAttribute('data-empty', n === 0);
+    fab.setAttribute('aria-label', 'View cart, ' + n + (n === 1 ? ' item' : ' items'));
+    if (bump) { fab.classList.remove('bump'); void fab.offsetWidth; fab.classList.add('bump'); }
   }
+  renderFab(false);
+  // Keep the badge right after edits in another tab or a back-navigation from the cart page.
+  addEventListener('storage', function (e) { if (e.key === CART_KEY) renderFab(false); });
+  addEventListener('pageshow', function () { renderFab(false); });
+
+  // Cart popup: preview one card's pick; submitting stores it.
+  var cart = document.getElementById('cart');
+  var cartImg = document.getElementById('cart-img');
+  var cartName = document.getElementById('cart-name');
+  var cartSpecs = document.getElementById('cart-specs');
+  var cartPrice = document.getElementById('cart-price');
+  var sleeve = document.getElementById('cart-sleeve');
+  var sleeveCount = document.getElementById('cart-count');
+  var cartState = null, cartProduct = null;
+
+  function updateSleeveCount() {
+    sleeveCount.textContent = sleeve.value.length + '/' + sleeve.maxLength;
+  }
+
+  function openCart(product, state, imgSrc) {
+    var color = product.colors[state.colorIndex];
+    cartState = state;
+    cartProduct = product;
+    cartImg.src = imgSrc;
+    cartImg.alt = color.name + ' ' + product.name;
+    cartName.textContent = product.name;
+    cartSpecs.innerHTML = '';
+    [color.name, 'Size ' + state.size].forEach(function (spec) { cartSpecs.appendChild(el('li', null, spec)); });
+    cartPrice.textContent = product.price + 'k ';
+    cartPrice.appendChild(el('span', null, 'VND'));
+    sleeve.value = state.sleeve || '';
+    updateSleeveCount();
+    document.documentElement.style.overflow = 'hidden';
+    cart.showModal();
+  }
+
+  sleeve.addEventListener('input', function () {
+    if (cartState) cartState.sleeve = sleeve.value;
+    updateSleeveCount();
+  });
+  function submitCart() {
+    var product = cartProduct, state = cartState, color = product.colors[state.colorIndex];
+    var ok = addToStoredCart({
+      key: product.key, name: product.name, color: color.name, size: state.size,
+      sleeve: sleeve.value.trim(), price: product.price, image: IMG_DIR + color.images[state.imageIndex]
+    });
+    cart.close();
+    if (!ok) { showToast('Could not save your cart. Private browsing may block storage.'); return; }
+    state.sleeve = '';
+    renderFab(true);
+    showToast('Added ' + product.name + ' / ' + color.name + ' / ' + state.size + ' to your cart.');
+  }
+
+  sleeve.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); submitCart(); } });
+  document.getElementById('cart-close').addEventListener('click', function () { cart.close(); });
+  document.getElementById('cart-done').addEventListener('click', submitCart);
+  cart.addEventListener('click', function (e) { if (e.target === cart) cart.close(); });
+  cart.addEventListener('close', function () {
+    document.documentElement.style.overflow = '';
+    cartState = cartProduct = null;
+  });
 
   PRODUCTS.forEach(function (product) {
-    var state = { colorIndex: 0, imageIndex: 0, size: null };
+    var state = { colorIndex: 0, imageIndex: 0, size: null, sleeve: '' };
 
     var article = el('article', 'product');
     article.style.setProperty('--accent', product.accent);
@@ -570,6 +740,16 @@ button{font:inherit;color:inherit}
     var colorLabel = el('p', 'product-color-label');
     top.appendChild(nameEl);
     top.appendChild(colorLabel);
+
+    var price = el('p', 'product-price');
+    if (product.opensIn) {
+      price.classList.add('is-soon');
+      price.textContent = 'Opens in ' + product.opensIn;
+    } else {
+      price.appendChild(el('b', null, product.price + 'k'));
+      price.appendChild(el('span', null, 'VND'));
+      price.setAttribute('aria-label', 'Price: ' + product.price + ',000 VND');
+    }
 
     var blurb = el('p', 'product-blurb', product.blurb);
 
@@ -604,12 +784,13 @@ button{font:inherit;color:inherit}
     });
 
     var ctaWrap = el('div', 'product-cta');
-    var cta = el('button', 'btn btn-pink', 'Copy my pick');
+    var cta = el('button', 'btn btn-pink', product.opensIn ? 'On sale in ' + product.opensIn : 'Add to cart');
     cta.type = 'button';
-    cta.addEventListener('click', copyPick);
+    cta.disabled = !!product.opensIn;
+    cta.addEventListener('click', addToCart);
     ctaWrap.appendChild(cta);
 
-    [top, blurb, thumbs, colorSet, sizeSet, ctaWrap].forEach(function (n) { body.appendChild(n); });
+    [top, price, blurb, thumbs, colorSet, sizeSet, ctaWrap].forEach(function (n) { body.appendChild(n); });
     article.appendChild(media);
     article.appendChild(sticker);
     article.appendChild(body);
@@ -668,7 +849,7 @@ button{font:inherit;color:inherit}
       });
     }
 
-    function copyPick() {
+    function addToCart() {
       if (!state.size) {
         sizeSet.classList.remove('needs-size');
         void sizeSet.offsetWidth; // restart the nudge animation
@@ -677,11 +858,7 @@ button{font:inherit;color:inherit}
         sizeButtons[0].focus();
         return;
       }
-      var line = formatPick(product, product.colors[state.colorIndex], state.size);
-      copyText(line).then(
-        function () { showToast('Copied “' + line + '”. Paste it in the order thread.'); },
-        function () { showToast('Copy this into the order thread: ' + line); }
-      );
+      openCart(product, state, img.src);
     }
 
     renderMain();
