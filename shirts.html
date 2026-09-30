@@ -380,6 +380,8 @@ button{font:inherit;color:inherit}
 .cart-field{display:block;margin-top:20px}
 .cart-field-label{display:block;font-weight:600}
 .cart-field-hint{display:block;margin:2px 0 8px;font-size:14px;color:var(--ink-soft)}
+.cart-fee{margin-left:6px;padding:1px 8px;border:2px solid var(--ink);border-radius:999px;background:var(--tan);font-family:var(--varsity);font-weight:900;font-size:15px;vertical-align:1px}
+.cart-price small{display:block;margin-top:3px;font-family:var(--body);font-size:12px;font-weight:600;color:var(--pink)}
 .cart-input-wrap{position:relative}
 .cart-input{
   width:100%;min-height:48px;padding:0 64px 0 14px;border-radius:12px;
@@ -599,8 +601,8 @@ button{font:inherit;color:inherit}
       </div>
     </div>
     <label class="cart-field" for="cart-sleeve">
-      <span class="cart-field-label">Custom text on the sleeve?</span>
-      <span class="cart-field-hint">Optional. Your name, a nickname, anything. Leave it blank for a plain sleeve.</span>
+      <span class="cart-field-label">Custom text on the sleeve? <span class="cart-fee">+30k</span></span>
+      <span class="cart-field-hint">Optional, adds 30k VND per shirt. Your name, a nickname, anything. Leave it blank for a plain sleeve.</span>
       <span class="cart-input-wrap">
         <input class="cart-input" id="cart-sleeve" type="text" maxlength="12" autocomplete="off" spellcheck="false" placeholder="e.g. Kemmie" aria-describedby="cart-count">
         <span class="cart-count" id="cart-count">0/12</span>
@@ -791,9 +793,17 @@ button{font:inherit;color:inherit}
   var sleeve = document.getElementById('cart-sleeve');
   var sleeveCount = document.getElementById('cart-count');
   var cartState = null, cartProduct = null;
+  var SLEEVE_PRICE = 30; // thousand VND, added per shirt with sleeve text; cart.html uses the same value
 
   function updateSleeveCount() {
     sleeveCount.textContent = sleeve.value.length + '/' + sleeve.maxLength;
+  }
+
+  function renderCartPrice() {
+    var custom = sleeve.value.trim() !== '';
+    cartPrice.textContent = (cartProduct.price + (custom ? SLEEVE_PRICE : 0)) + 'k ';
+    cartPrice.appendChild(el('span', null, 'VND'));
+    if (custom) cartPrice.appendChild(el('small', null, 'Includes +' + SLEEVE_PRICE + 'k for sleeve text'));
   }
 
   function openCart(product, state, imgSrc) {
@@ -805,10 +815,9 @@ button{font:inherit;color:inherit}
     cartName.textContent = product.name;
     cartSpecs.innerHTML = '';
     [color.name, 'Size ' + state.size].forEach(function (spec) { cartSpecs.appendChild(el('li', null, spec)); });
-    cartPrice.textContent = product.price + 'k ';
-    cartPrice.appendChild(el('span', null, 'VND'));
     sleeve.value = state.sleeve || '';
     updateSleeveCount();
+    renderCartPrice();
     document.documentElement.style.overflow = 'hidden';
     cart.showModal();
   }
@@ -816,6 +825,7 @@ button{font:inherit;color:inherit}
   sleeve.addEventListener('input', function () {
     if (cartState) cartState.sleeve = sleeve.value;
     updateSleeveCount();
+    renderCartPrice();
   });
   function submitCart() {
     var product = cartProduct, state = cartState, color = product.colors[state.colorIndex];

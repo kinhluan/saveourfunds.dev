@@ -342,6 +342,10 @@ button{font:inherit;color:inherit}
 
   function money(k) { return k.toLocaleString('en-US') + 'k'; }
 
+  // Stored price is the base price; sleeve text adds a flat fee per shirt (same value as shirts.html).
+  var SLEEVE_PRICE = 30;
+  function unitPrice(item) { return item.price + (item.sleeve ? SLEEVE_PRICE : 0); }
+
   function priceNode(k) {
     var wrap = el('span');
     wrap.appendChild(el('b', null, money(k)));
@@ -380,7 +384,7 @@ button{font:inherit;color:inherit}
     var specs = el('ul', 'specs');
     specs.appendChild(el('li', null, item.color));
     specs.appendChild(el('li', null, 'Size ' + item.size));
-    specs.appendChild(item.sleeve ? el('li', 'sleeve', 'Sleeve: “' + item.sleeve + '”') : el('li', null, 'Plain sleeve'));
+    specs.appendChild(item.sleeve ? el('li', 'sleeve', 'Sleeve: “' + item.sleeve + '” +' + SLEEVE_PRICE + 'k') : el('li', null, 'Plain sleeve'));
     info.appendChild(specs);
 
     var controls = el('div', 'item-controls');
@@ -412,8 +416,8 @@ button{font:inherit;color:inherit}
     info.appendChild(controls);
 
     var total = el('div', 'item-total');
-    total.appendChild(el('b', null, money(item.price * item.qty)));
-    total.appendChild(el('span', null, money(item.price) + ' VND each'));
+    total.appendChild(el('b', null, money(unitPrice(item) * item.qty)));
+    total.appendChild(el('span', null, money(unitPrice(item)) + ' VND each'));
 
     li.appendChild(img); li.appendChild(info); li.appendChild(total);
     return li;
@@ -422,7 +426,7 @@ button{font:inherit;color:inherit}
   function render() {
     var items = readCart();
     var count = items.reduce(function (n, it) { return n + it.qty; }, 0);
-    var total = items.reduce(function (n, it) { return n + it.price * it.qty; }, 0);
+    var total = items.reduce(function (n, it) { return n + unitPrice(it) * it.qty; }, 0);
 
     layout.hidden = count === 0;
     empty.hidden = count !== 0;
@@ -484,7 +488,7 @@ button{font:inherit;color:inherit}
     return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
   }
 
-  function cartTotal(items) { return items.reduce(function (n, it) { return n + it.price * it.qty; }, 0); }
+  function cartTotal(items) { return items.reduce(function (n, it) { return n + unitPrice(it) * it.qty; }, 0); }
 
   function renderReview(items) {
     review.innerHTML = '';
@@ -495,9 +499,9 @@ button{font:inherit;color:inherit}
       img.alt = '';
       var text = el('div');
       text.appendChild(el('p', 'review-name', item.qty + ' × ' + item.name));
-      text.appendChild(el('p', 'review-meta', [item.color, 'Size ' + item.size, item.sleeve ? 'Sleeve “' + item.sleeve + '”' : 'Plain sleeve'].join(' · ')));
+      text.appendChild(el('p', 'review-meta', [item.color, 'Size ' + item.size, item.sleeve ? 'Sleeve “' + item.sleeve + '” +' + SLEEVE_PRICE + 'k' : 'Plain sleeve'].join(' · ')));
       li.appendChild(img); li.appendChild(text);
-      li.appendChild(el('span', 'review-total', money(item.price * item.qty)));
+      li.appendChild(el('span', 'review-total', money(unitPrice(item) * item.qty)));
       review.appendChild(li);
     });
     reviewTotal.innerHTML = '';
