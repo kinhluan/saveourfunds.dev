@@ -194,7 +194,15 @@ button{font:inherit;color:inherit}
 
 .picker{margin:0 0 14px;padding:0;border:0}
 .picker legend{padding:0;margin-bottom:8px;font-size:13px;font-weight:600;color:var(--ink)}
+.picker legend.has-link{display:flex;align-items:baseline;justify-content:space-between;gap:12px;width:100%}
+.guide-link{
+  padding:0;border:0;background:none;cursor:pointer;
+  font-size:13px;font-weight:600;color:var(--ink-soft);text-decoration:underline;text-underline-offset:3px;
+}
+.guide-link:hover{color:var(--pink)}
 .picker-row{display:flex;flex-wrap:wrap;gap:8px}
+.picker-row.sizes{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.picker-row.sizes .size{min-width:0;padding:0 2px}
 .swatch{
   display:inline-flex;align-items:center;gap:8px;
   min-height:38px;padding:0 14px 0 6px;border-radius:999px;cursor:pointer;
@@ -312,6 +320,38 @@ button{font:inherit;color:inherit}
 @keyframes bump{30%{transform:scale(1.12) rotate(-3deg)}60%{transform:scale(.96)}}
 @media (prefers-reduced-motion:reduce){.cart-fab.bump{animation:none}}
 @media (max-width:520px){.toast{bottom:max(84px,calc(env(safe-area-inset-bottom) + 68px))}}
+
+/* ── size guide popup ────────────────────── */
+.size-guide{
+  padding:0;margin:auto;
+  width:min(calc(100vw - 32px),820px);max-width:none;max-height:calc(100dvh - 32px);
+  border:2px solid var(--ink);border-radius:24px;overflow:auto;
+  background:var(--paper);color:var(--ink);box-shadow:8px 8px 0 var(--pink);
+}
+.size-guide::backdrop{background:rgba(26,16,48,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.size-guide[open]{animation:lb-in .24s cubic-bezier(.2,.8,.2,1)}
+@media (prefers-reduced-motion:reduce){.size-guide[open]{animation:none}}
+.guide-inner{outline:none;position:relative;padding:22px 22px 24px}
+.guide-title{margin:0 44px 4px 0;font-family:var(--varsity);font-weight:900;font-size:32px;line-height:.95;text-transform:uppercase}
+.guide-note{margin:0 0 16px;color:var(--ink-soft);font-size:14px}
+.guide-scroll{overflow-x:auto;border:2px solid var(--ink);border-radius:16px;background:var(--white)}
+.guide-table{width:100%;min-width:520px;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.guide-table th,.guide-table td{padding:12px 10px;text-align:center;white-space:nowrap;border-bottom:1px solid rgba(26,16,48,.1)}
+.guide-table tr:last-child th,.guide-table tr:last-child td{border-bottom:0}
+.guide-table tbody th{position:sticky;left:0;z-index:1;text-align:left;padding-left:14px;background:var(--white);font-weight:600;font-size:14px}
+.guide-table tbody th span{display:block;font-size:12px;font-weight:500;color:var(--ink-soft)}
+.guide-table thead th{padding:8px 4px}
+.guide-table thead th:first-child{position:sticky;left:0;z-index:1;background:var(--white)}
+.guide-size{
+  min-width:52px;min-height:36px;padding:0 8px;border-radius:10px;cursor:pointer;
+  border:2px solid rgba(26,16,48,.18);background:var(--white);
+  font-family:var(--varsity);font-weight:900;font-size:18px;color:var(--ink);
+}
+.guide-size:hover{border-color:var(--ink)}
+.guide-table .is-picked{background:var(--paper)}
+.guide-table thead .is-picked .guide-size{background:var(--ink);border-color:var(--ink);color:var(--white)}
+.guide-tip{display:none;margin:14px 0 0;font-size:14px;color:var(--ink-soft)}
+@media (max-width:600px){.guide-tip{display:block}}
 
 /* ── cart popup ──────────────────────────── */
 .cart{
@@ -534,6 +574,18 @@ button{font:inherit;color:inherit}
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<dialog class="size-guide" id="size-guide" aria-labelledby="guide-title">
+  <div class="guide-inner" tabindex="-1" autofocus>
+    <h2 class="guide-title" id="guide-title">Size guide</h2>
+    <p class="guide-note">Garment measurements. Find your height and weight, then tap a size to pick it.</p>
+    <button type="button" class="cart-close" id="guide-close" aria-label="Close">✕</button>
+    <div class="guide-scroll">
+      <table class="guide-table" id="guide-table"></table>
+    </div>
+    <p class="guide-tip">Scroll sideways to see every size.</p>
+  </div>
+</dialog>
+
 <dialog class="cart" id="cart" aria-labelledby="cart-title">
   <div class="cart-inner" tabindex="-1" autofocus>
     <h2 class="cart-title" id="cart-title">Your pick</h2>
@@ -580,7 +632,16 @@ button{font:inherit;color:inherit}
 <script>
 (function () {
   var IMG_DIR = 'shirt-img-2026/';
-  var SIZES = ['S', 'M', 'L', 'XL', 'XXL'];
+  var SIZES = ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
+  // Rows of the size guide, one value per entry in SIZES.
+  var SIZE_CHART = [
+    { label: 'Height', unit: 'cm', values: ['155–159', '160–165', '166–172', '172–177', '177–183', '184–192'] },
+    { label: 'Weight', unit: 'kg', values: ['48–54', '55–61', '62–68', '69–75', '76–82', '83–90'] },
+    { label: 'Length', unit: 'cm', values: ['65', '67', '69', '71', '73', '75'] },
+    { label: 'Sleeve', unit: 'cm', values: ['21.5', '22.5', '23', '23.5', '24.5', '25.5'] },
+    { label: 'Chest width', unit: 'cm', values: ['47', '49', '51', '53', '55', '57'] },
+    { label: 'Shoulder width', unit: 'cm', values: ['42.5', '43.5', '44.5', '45.5', '46.5', '47.5'] }
+  ];
 
   // accent = card's offset shadow; sticker = playful tag over the photo.
   // price is in thousand VND; opensIn replaces it for a cut that is not on sale yet.
@@ -630,6 +691,64 @@ button{font:inherit;color:inherit}
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 3200);
   }
+
+  // Size guide: one shared dialog; `onPick` selects the size on the card that opened it.
+  var guide = document.getElementById('size-guide');
+  var guideTable = document.getElementById('guide-table');
+  var guidePick = null;
+
+  (function buildSizeGuide() {
+    var head = el('thead'), headRow = el('tr');
+    var corner = el('th', null, 'Size');
+    corner.scope = 'col';
+    headRow.appendChild(corner);
+    SIZES.forEach(function (size) {
+      var th = el('th');
+      th.scope = 'col';
+      th.dataset.size = size;
+      var btn = el('button', 'guide-size', size);
+      btn.type = 'button';
+      btn.setAttribute('aria-label', 'Pick size ' + size);
+      btn.addEventListener('click', function () {
+        if (guidePick) guidePick(size);
+        guide.close();
+      });
+      th.appendChild(btn);
+      headRow.appendChild(th);
+    });
+    head.appendChild(headRow);
+    var body = el('tbody');
+    SIZE_CHART.forEach(function (row) {
+      var tr = el('tr'), th = el('th', null, row.label);
+      th.scope = 'row';
+      th.appendChild(el('span', null, row.unit));
+      tr.appendChild(th);
+      row.values.forEach(function (value, i) {
+        var td = el('td', null, value);
+        td.dataset.size = SIZES[i];
+        tr.appendChild(td);
+      });
+      body.appendChild(tr);
+    });
+    guideTable.appendChild(head);
+    guideTable.appendChild(body);
+  })();
+
+  function openSizeGuide(currentSize, onPick) {
+    guidePick = onPick;
+    [].slice.call(guideTable.querySelectorAll('[data-size]')).forEach(function (cell) {
+      cell.classList.toggle('is-picked', cell.dataset.size === currentSize);
+    });
+    document.documentElement.style.overflow = 'hidden';
+    guide.showModal();
+  }
+
+  document.getElementById('guide-close').addEventListener('click', function () { guide.close(); });
+  guide.addEventListener('click', function (e) { if (e.target === guide) guide.close(); });
+  guide.addEventListener('close', function () {
+    document.documentElement.style.overflow = '';
+    guidePick = null;
+  });
 
   // Cart storage, shared with cart.html. Identical lines (same cut, color, size, sleeve) merge into one with qty.
   var CART_KEY = 'sof-cart-v1';
@@ -771,8 +890,14 @@ button{font:inherit;color:inherit}
     });
 
     var sizeSet = el('fieldset', 'picker');
-    sizeSet.appendChild(el('legend', null, 'Size'));
-    var sizeRow = el('div', 'picker-row');
+    var sizeLegend = el('legend', 'has-link', 'Size');
+    var guideLink = el('button', 'guide-link', 'Size guide');
+    guideLink.type = 'button';
+    guideLink.setAttribute('aria-haspopup', 'dialog');
+    guideLink.addEventListener('click', function () { openSizeGuide(state.size, selectSize); });
+    sizeLegend.appendChild(guideLink);
+    sizeSet.appendChild(sizeLegend);
+    var sizeRow = el('div', 'picker-row sizes');
     sizeSet.appendChild(sizeRow);
     var sizeButtons = SIZES.map(function (size) {
       var btn = el('button', 'size', size);
