@@ -15,8 +15,9 @@
 <style>
 :root{
   --hero-pad:clamp(20px,4vh,48px);
-  /* Vertical space the video must leave: header, hero padding, frame padding and shadow. */
-  --video-chrome:calc(76px + 2 * var(--hero-pad) + 34px);
+  /* Vertical space the video must leave: header, hero padding, frame padding and shadow, and the
+     wishes band, so the band stays visible without scrolling. */
+  --video-chrome:calc(76px + 2 * var(--hero-pad) + 34px + 64px);
   --pink:#C81E7E;
   --pink-hot:#E3238F;
   --pink-deep:#8E0F57;
@@ -87,6 +88,16 @@ a{color:inherit}
 }
 .hero h1 span{display:block;padding-top:.26em;color:var(--tan)}
 .lede{margin:clamp(20px,2.6vw,28px) 0 0;max-width:30ch;font-size:clamp(17px,1.7vw,20px);line-height:1.5}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:54px;margin-top:clamp(20px,2.6vw,28px);padding:0 26px 0 22px;border-radius:999px;
+  border:2px solid var(--ink);background:var(--tan);color:var(--ink);box-shadow:4px 4px 0 var(--ink);
+  font-family:var(--varsity);font-weight:900;font-size:22px;letter-spacing:.02em;text-transform:uppercase;text-decoration:none;
+  transition:transform .12s ease,box-shadow .12s ease;
+}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 /* Portrait video in a phone-like frame, as tall as the viewport allows. The file is 1080x1920 but
    has 182px black bars top and bottom, so the frame uses the picture's own ratio (1080:1550, a
@@ -176,17 +187,56 @@ a{color:inherit}
 @media (prefers-reduced-motion:reduce){.confetti{display:none}}
 
 /* ── ticker ──────────────────────────────── */
-.ticker{position:relative;z-index:2;overflow:hidden;background:var(--tan);color:var(--ink);border-block:2px solid var(--ink)}
-.ticker-track{display:flex;width:max-content;animation:ticker 32s linear infinite}
+.ticker{position:relative;z-index:2;display:flex;align-items:stretch;background:var(--tan);color:var(--ink);border-block:2px solid var(--ink)}
+.ticker-viewport{flex:1;min-width:0;overflow:hidden}
+.wishes-btn{
+  flex:none;display:inline-flex;align-items:center;gap:8px;padding:0 18px;cursor:pointer;
+  border:0;border-left:2px solid var(--ink);background:var(--ink);color:var(--white);
+  font-family:var(--varsity);font-weight:900;font-size:19px;text-transform:uppercase;letter-spacing:.02em;white-space:nowrap;
+}
+.wishes-btn:hover{background:var(--pink-deep)}
+.wishes-btn[hidden]{display:none}
+.wishes-btn b{display:grid;place-items:center;min-width:24px;height:24px;padding:0 6px;border-radius:999px;background:var(--lime);color:var(--ink);font-size:15px}
+.ticker-track{display:flex;width:max-content;animation:ticker 20s linear infinite}
 .ticker-track span{
   display:flex;align-items:center;gap:22px;padding:12px 11px;white-space:nowrap;
   font-family:var(--varsity);font-weight:900;font-size:clamp(20px,2.4vw,28px);text-transform:uppercase;letter-spacing:.02em;
 }
-.ticker-track span::after{content:"";width:12px;height:12px;background:var(--pink);transform:rotate(45deg)}
+.ticker-track span::after{content:"";flex:none;width:12px;height:12px;background:var(--pink);transform:rotate(45deg)}
+/* Wishes are whole sentences: keep their own case in the body font so they stay readable. */
+.ticker-track.is-wishes span{padding:14px 16px;font-family:var(--body);font-weight:600;font-size:clamp(17px,1.6vw,20px);text-transform:none;letter-spacing:0;line-height:1.4}
 @keyframes ticker{to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){
   .ticker-track{animation:none;width:auto;flex-wrap:wrap;justify-content:center}
   .ticker-track [aria-hidden]{display:none}
+}
+
+/* ── all wishes dialog ───────────────────── */
+.wishes-dialog{
+  padding:0;margin:auto;
+  width:min(calc(100vw - 32px),620px);max-width:none;max-height:calc(100dvh - 32px);
+  border:2px solid var(--ink);border-radius:24px;overflow:hidden;
+  background:#FFF4F9;color:var(--ink);box-shadow:8px 8px 0 var(--pink);
+}
+.wishes-dialog[open]{display:flex;flex-direction:column}
+.wishes-dialog::backdrop{background:rgba(26,16,48,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.wd-head{position:relative;padding:22px 70px 14px 22px;border-bottom:2px solid var(--ink)}
+.wd-head h2{margin:0;font-family:var(--varsity);font-weight:900;font-size:32px;line-height:.95;text-transform:uppercase}
+.wd-head p{margin:4px 0 0;color:#5B4F6E;font-size:14px}
+.wd-close{
+  position:absolute;top:16px;right:16px;width:38px;height:38px;padding:0;border-radius:50%;cursor:pointer;
+  border:2px solid var(--ink);background:var(--white);font-size:15px;color:var(--ink);
+}
+.wd-close:hover{background:var(--tan)}
+.wd-list{margin:0;padding:14px 22px 22px;list-style:none;overflow:auto;min-height:0;display:grid;gap:12px;counter-reset:wish}
+.wd-list li{
+  position:relative;padding:14px 16px 14px 52px;border:2px solid var(--ink);border-radius:16px;background:var(--white);
+  font-size:17px;line-height:1.5;overflow-wrap:anywhere;white-space:pre-line;
+}
+.wd-list li::before{
+  content:attr(data-n);position:absolute;left:12px;top:12px;display:grid;place-items:center;
+  width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--white);
+  font-family:var(--varsity);font-weight:900;font-size:15px;
 }
 
 /* ── colophon ────────────────────────────── */
@@ -226,6 +276,25 @@ a{color:inherit}
   <span class="whereabouts">MoMo · <span>Ho Chi Minh City · Vietnam</span></span>
 </header>
 
+<div class="ticker" aria-label="Lời chúc từ team">
+  <div class="ticker-viewport">
+  <div class="ticker-track" id="wishes">
+    <span>Happy birthday</span><span>Sếp Luân</span><span>Sinh nhật vui vẻ</span><span>From the SOF crew</span>
+    <span aria-hidden="true">Happy birthday</span><span aria-hidden="true">Sếp Luân</span><span aria-hidden="true">Sinh nhật vui vẻ</span><span aria-hidden="true">From the SOF crew</span>
+  </div>
+  </div>
+  <button type="button" class="wishes-btn" id="wishes-btn" aria-haspopup="dialog" hidden>Xem tất cả <b id="wishes-count">0</b></button>
+</div>
+
+<dialog class="wishes-dialog" id="wishes-dialog" aria-labelledby="wd-title">
+  <div class="wd-head">
+    <h2 id="wd-title">Lời chúc cho Sếp Luân</h2>
+    <p id="wd-sub"></p>
+    <button type="button" class="wd-close" id="wd-close" aria-label="Đóng">✕</button>
+  </div>
+  <ol class="wd-list" id="wd-list"></ol>
+</dialog>
+
 <main class="hero">
   <div class="confetti" id="confetti" aria-hidden="true"></div>
 
@@ -233,6 +302,10 @@ a{color:inherit}
     <p class="badge">From the SOF crew</p>
     <h1>Happy Birthday <span>Sếp Luân</span></h1>
     <p class="lede">Một năm mới thật nhiều sức khỏe, niềm vui và thành công. CẢNH BÁO CÓ ÂM THANH!</p>
+    <a class="btn" href="https://forms.gle/81LeEuGFZu3ymkGG8" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v10H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg>
+      Gửi lời chúc
+    </a>
   </div>
 
   <div class="video-wrap">
@@ -249,12 +322,6 @@ a{color:inherit}
   </div>
 </main>
 
-<div class="ticker">
-  <div class="ticker-track">
-    <span>Happy birthday</span><span>Sếp Luân</span><span>Sinh nhật vui vẻ</span><span>From the SOF crew</span>
-    <span aria-hidden="true">Happy birthday</span><span aria-hidden="true">Sếp Luân</span><span aria-hidden="true">Sinh nhật vui vẻ</span><span aria-hidden="true">From the SOF crew</span>
-  </div>
-</div>
 
 <footer class="colophon">
   <a href="index.html">← saveourfunds.dev</a>
@@ -262,6 +329,93 @@ a{color:inherit}
 </footer>
 
 <script>
+// Wishes band: column B of the form responses sheet, from row 2 down (headers=1 makes row 1 the
+// header). Loaded as JSONP (a <script> with a callback), which Google's query endpoint supports and
+// which, unlike fetch, also works when the page is opened as a local file. The static band stays
+// if the sheet can't be read or has no wishes yet. Refreshes so new wishes show up.
+(function () {
+  var SHEET_QUERY = 'https://docs.google.com/spreadsheets/d/1hXY6eT5UwPzyUusj2FLPwnb36nJ8fs2_0PhMJMFhpJY/gviz/tq?gid=307098694&headers=1&tq=' + encodeURIComponent('select B');
+  var REFRESH_MS = 10000;
+  var SPEED_PX_PER_S = 110;
+  var MAX_LEN = 280;
+  var track = document.getElementById('wishes');
+  var btn = document.getElementById('wishes-btn');
+  var count = document.getElementById('wishes-count');
+  var dialog = document.getElementById('wishes-dialog');
+  var list = document.getElementById('wd-list');
+  var sub = document.getElementById('wd-sub');
+  var shown = '';
+
+  // Full text, newest first, numbered by submission order.
+  function renderDialog(wishes) {
+    list.textContent = '';
+    for (var i = wishes.length - 1; i >= 0; i--) {
+      var li = document.createElement('li');
+      li.dataset.n = i + 1;
+      li.textContent = wishes[i];
+      list.appendChild(li);
+    }
+    sub.textContent = wishes.length + ' lời chúc từ team · mới nhất ở trên';
+    count.textContent = wishes.length;
+    btn.setAttribute('aria-label', 'Xem tất cả ' + wishes.length + ' lời chúc');
+    btn.hidden = false;
+  }
+
+  function render(wishes) {
+    var key = wishes.join('\u0000');
+    if (key === shown) return;
+    shown = key;
+    renderDialog(wishes);
+    var oneLine = wishes.map(function (w) { return w.replace(/\s+/g, ' '); });
+    track.textContent = '';
+    track.classList.add('is-wishes');
+    [false, true].forEach(function (copy) {
+      oneLine.forEach(function (wish) {
+        var span = document.createElement('span');
+        span.textContent = wish;
+        if (copy) span.setAttribute('aria-hidden', 'true');
+        track.appendChild(span);
+      });
+    });
+    // The track holds two copies and scrolls by half its width, so time = one copy's width / speed.
+    track.style.animationDuration = Math.max(10, track.scrollWidth / 2 / SPEED_PX_PER_S) + 's';
+  }
+
+  function load() {
+    var name = '__sofWishes' + Date.now();
+    var script = document.createElement('script');
+    var timer = setTimeout(cleanup, 15000);
+    function cleanup() {
+      clearTimeout(timer);
+      delete window[name];
+      script.remove();
+    }
+    window[name] = function (resp) {
+      cleanup();
+      if (!resp || resp.status !== 'ok') { console.warn('Could not load wishes', resp && resp.errors); return; }
+      var wishes = resp.table.rows
+        .map(function (row) { var cell = row.c && row.c[0]; return String((cell && cell.v) || '').trim().slice(0, MAX_LEN); })
+        .filter(Boolean);
+      if (wishes.length) render(wishes);
+    };
+    script.onerror = function () { cleanup(); console.warn('Could not load wishes'); };
+    script.src = SHEET_QUERY + '&tqx=' + encodeURIComponent('out:json;responseHandler:' + name) + '&_=' + Date.now();
+    document.head.appendChild(script);
+  }
+
+  btn.addEventListener('click', function () {
+    document.documentElement.style.overflow = 'hidden';
+    dialog.showModal();
+    list.scrollTop = 0;
+  });
+  document.getElementById('wd-close').addEventListener('click', function () { dialog.close(); });
+  dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
+  dialog.addEventListener('close', function () { document.documentElement.style.overflow = ''; });
+
+  load();
+  setInterval(load, REFRESH_MS);
+})();
+
 // Sound on start: browsers refuse audio until the visitor interacts with the page, and no code can
 // override that. The gift screen always shows first; its tap is the interaction that unlocks audio,
 // and the video then starts from the top with sound.
