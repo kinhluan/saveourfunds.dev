@@ -239,6 +239,68 @@ a{color:inherit}
   font-family:var(--varsity);font-weight:900;font-size:15px;
 }
 
+/* ── round 2: fight poster for the boxing clip ── */
+.fight{
+  --red:#E5373B;--blue:#2F6BFF;
+  position:relative;overflow:hidden;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;
+  gap:clamp(28px,5vw,72px);padding:clamp(48px,7vw,96px) var(--gutter);
+  background:
+    linear-gradient(115deg,rgba(229,55,59,.22) 0 46%,transparent 46% 54%,rgba(47,107,255,.22) 54% 100%),
+    var(--ink);
+  color:var(--white);border-top:2px solid var(--ink);
+}
+.fight::before{
+  content:"VS";position:absolute;right:-2vw;bottom:-6vw;z-index:0;
+  font-family:var(--varsity);font-weight:900;font-size:clamp(12rem,34vw,30rem);line-height:.8;
+  color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.08);pointer-events:none;user-select:none;
+}
+/* Same video height as the main clip (viewport height minus the same chrome); width follows this
+   clip's own 9:16 ratio. */
+.fight-video{
+  position:relative;z-index:1;justify-self:center;
+  width:min(100%,calc((100vh - var(--video-chrome)) * 720 / 1280 + 24px));
+  width:min(100%,calc((100svh - var(--video-chrome)) * 720 / 1280 + 24px));
+}
+.fight-card{
+  margin:0;padding:10px;border:2px solid var(--white);border-radius:30px;background:var(--white);
+  box-shadow:-10px 10px 0 var(--red),10px -10px 0 var(--blue);transform:rotate(-2.5deg);
+}
+.fight-card video{display:block;width:100%;height:auto;aspect-ratio:720 / 1280;object-fit:cover;border-radius:22px;background:var(--ink)}
+.fight-bell{
+  position:absolute;top:-16px;right:-14px;z-index:2;
+  padding:6px 12px;border:2px solid var(--ink);border-radius:8px;background:var(--lime);color:var(--ink);
+  font-family:var(--varsity);font-weight:900;font-size:18px;text-transform:uppercase;letter-spacing:.03em;
+  transform:rotate(7deg);pointer-events:none;
+}
+.fight-copy{position:relative;z-index:1}
+.fight-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;margin:0 0 18px;padding:7px 14px;
+  border:2px solid var(--white);border-radius:999px;
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+}
+.fight-eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 0 3px rgba(229,55,59,.35);animation:live 1.2s ease-in-out infinite}
+@keyframes live{50%{opacity:.35}}
+.fight h2{margin:0;font-family:var(--varsity);font-weight:900;text-transform:uppercase;line-height:.86;font-size:clamp(3rem,7.5vw,6.6rem)}
+.fight h2 .red{display:block;color:var(--red);text-shadow:4px 4px 0 #000}
+.fight h2 .vs{
+  display:inline-grid;place-items:center;width:1.25em;height:1.25em;margin:.12em 0;border-radius:50%;
+  background:var(--lime);color:var(--ink);font-size:.42em;vertical-align:middle;transform:rotate(-8deg);
+}
+.fight h2 .blue{display:block;color:var(--blue);text-shadow:4px 4px 0 #000}
+.tape{margin:26px 0 0;padding:0;list-style:none;display:grid;gap:0;max-width:440px;border:2px solid var(--white);border-radius:16px;overflow:hidden}
+.tape li{display:grid;grid-template-columns:110px minmax(0,1fr);gap:14px;padding:11px 16px;font-size:15px}
+.tape li + li{border-top:1px solid rgba(255,255,255,.2)}
+.tape b{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);padding-top:4px}
+.fight-sound{margin-top:24px}
+.fight-sound[aria-pressed="true"]{background:var(--lime)}
+.fight-sound svg{fill:currentColor;stroke:none}
+@media (max-width:820px){
+  .fight{grid-template-columns:1fr}
+  .fight-video{order:2}
+}
+@media (prefers-reduced-motion:reduce){.fight-eyebrow::before{animation:none}}
+
 /* ── colophon ────────────────────────────── */
 .colophon{
   display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;
@@ -322,6 +384,30 @@ a{color:inherit}
   </div>
 </main>
 
+<section class="fight" aria-labelledby="fight-title">
+  <div class="fight-copy">
+    <p class="fight-eyebrow">Main event · Round 2</p>
+    <h2 id="fight-title"><span class="red">Sếp Luân</span><span class="vs" aria-label="đấu với">VS</span><span class="blue">Tuổi mới</span></h2>
+    <ul class="tape" aria-label="Thông số trận đấu">
+      <li><b>Hạng cân</b><span>Siêu nặng ký, gánh cả team</span></li>
+      <li><b>Vũ khí</b><span>Găng đỏ và deadline</span></li>
+      <li><b>Dự đoán</b><span>Knock-out tuổi mới ngay hiệp 1</span></li>
+    </ul>
+    <button type="button" class="btn fight-sound" id="fight-sound" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path id="fight-icon" d="M7 4.5v15l12-7.5z"/></svg>
+      <span>Xem hiệp 2</span>
+    </button>
+  </div>
+  <div class="fight-video">
+    <figure class="fight-card">
+      <span class="fight-bell">Ding ding!</span>
+      <!-- #t=0.1 makes Safari paint the first frame instead of a blank box before playback. -->
+      <video id="fight-video" controls playsinline loop preload="auto" width="720" height="1280"
+             src="shirt-img-2026/hpbd-2.mp4#t=0.1"
+             aria-label="Clip Sếp Luân đấu boxing"></video>
+    </figure>
+  </div>
+</section>
 
 <footer class="colophon">
   <a href="index.html">← saveourfunds.dev</a>
@@ -456,6 +542,57 @@ a{color:inherit}
   });
   unmute.addEventListener('click', function () { playWithSound().catch(playMuted); });
   video.addEventListener('volumechange', function () { showUnmute(video.muted && !video.paused); });
+})();
+
+// Round 2 clip: scrolling it into view plays it with sound and pauses the main video; scrolling
+// back up pauses it and resumes the main one. Sound is allowed because the gift tap already counts
+// as an interaction. The button and the video's own controls still work by hand.
+(function () {
+  var fight = document.getElementById('fight-video');
+  var main = document.getElementById('video');
+  var gate = document.getElementById('gate');
+  var btn = document.getElementById('fight-sound');
+  var label = btn.querySelector('span');
+  var icon = document.getElementById('fight-icon');
+
+  function syncButton() {
+    var playing = !fight.paused;
+    btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    label.textContent = playing ? 'Dừng hiệp 2' : 'Xem hiệp 2';
+    icon.setAttribute('d', playing ? 'M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z' : 'M7 4.5v15l12-7.5z');
+  }
+
+  function playFight() {
+    main.pause();
+    fight.muted = false;
+    fight.play().catch(function () {
+      fight.muted = true;
+      fight.play().catch(function () {});
+    });
+  }
+
+  function backToMain() {
+    fight.pause();
+    if (gate.classList.contains('is-open')) main.play().catch(function () {});
+  }
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!gate.classList.contains('is-open')) return;
+        if (entry.isIntersecting) playFight();
+        else if (!fight.paused) backToMain();
+      });
+    }, { threshold: 0.5 }).observe(fight);
+  }
+
+  btn.addEventListener('click', function () {
+    if (fight.paused) playFight();
+    else fight.pause();
+  });
+  fight.addEventListener('play', function () { main.pause(); syncButton(); });
+  fight.addEventListener('pause', syncButton);
+  main.addEventListener('play', function () { if (!fight.paused) fight.pause(); });
 })();
 
 (function () {
