@@ -137,9 +137,12 @@ a{color:inherit}
 @media (prefers-reduced-motion:reduce){.unmute{animation:none}}
 
 /* ── envelope intro ──────────────────────────────────────────────────────────
-   Tapping the seal unlocks sound, then plays a ~3.5s sequence and only then reveals the page:
-   seal cracks (0–.5s) → flap opens (.35–1s) → letter rises and its lines appear (.9–2.4s)
-   with a burst of hearts → letter zooms and the screen fades (3–3.6s). */
+   Tapping the seal unlocks sound, then plays a ~3.7s sequence and only then reveals the page:
+   seal cracks apart (0–.45s) → flap folds back (.3–1.05s) → letter rises out of the pocket and
+   its lines fade in (.85–2.4s) while hearts stream out from behind the paper → a beat to read →
+   the envelope drops away, the letter drifts toward the viewer and the screen fades (3–3.7s).
+   Everything that moves animates transform/opacity only and is promoted to its own layer, so the
+   whole sequence stays on the compositor instead of repainting the gradients under it. */
 .gate{
   position:fixed;inset:0;z-index:50;overflow:hidden;
   display:grid;place-items:center;padding:24px;cursor:pointer;
@@ -147,7 +150,7 @@ a{color:inherit}
     radial-gradient(60% 50% at 50% 35%,#FFFFFF 0%,transparent 70%),
     linear-gradient(180deg,var(--cream),var(--blush) 60%,#F9C6DA);
   color:var(--plum);text-align:center;
-  transition:opacity .6s ease,visibility .6s ease;
+  transition:opacity .7s cubic-bezier(.4,0,.2,1),visibility 0s linear .7s;
 }
 .gate.is-done{opacity:0;visibility:hidden}
 .gate-inner{position:relative;z-index:2;display:grid;justify-items:center;gap:18px;max-width:560px}
@@ -158,12 +161,14 @@ a{color:inherit}
 }
 .gate h2 em{font-style:normal;color:var(--rose-deep);font-weight:700}
 .gate-hint{margin:0;font-size:14px;color:var(--plum-soft)}
-.gate-kicker,.gate h2,.gate-hint{transition:opacity .4s ease,transform .4s ease}
-.gate.is-opening .gate-kicker,.gate.is-opening h2,.gate.is-opening .gate-hint{opacity:0;transform:translateY(-10px)}
+.gate-kicker,.gate h2,.gate-hint{transition:opacity .45s ease,transform .45s cubic-bezier(.4,0,.2,1)}
+.gate.is-opening .gate-kicker,.gate.is-opening h2,.gate.is-opening .gate-hint{opacity:0;transform:translate3d(0,-12px,0)}
+.gate.is-opening h2{transition-delay:.07s}
+.gate.is-opening .gate-hint{transition-delay:.14s}
 
-.envelope{position:relative;width:min(340px,82vw);aspect-ratio:3 / 2;margin:10px 0 6px;perspective:1000px}
+.envelope{position:relative;width:min(340px,82vw);aspect-ratio:3 / 2;margin:10px 0 6px;perspective:1100px}
 .env-back,.env-front,.env-flap{position:absolute;inset:0;border-radius:16px}
-.env-back{z-index:1;background:#F3B7CB;box-shadow:0 30px 50px -24px rgba(194,24,91,.55)}
+.env-back{z-index:1;background:linear-gradient(180deg,#F5BDCF,#EDA6BF);box-shadow:0 30px 50px -24px rgba(194,24,91,.55)}
 .env-letter{
   position:absolute;left:7%;right:7%;top:8%;height:86%;z-index:2;border-radius:12px;
   background:
@@ -171,38 +176,47 @@ a{color:inherit}
     var(--cream);
   box-shadow:0 10px 24px -14px rgba(74,18,56,.45);
   display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 16px;
-  transition:transform .9s cubic-bezier(.2,.8,.2,1) .9s;
+  transform:translate3d(0,0,0);
+  transition:transform .9s cubic-bezier(.22,.8,.22,1) .85s;
+  will-change:transform;
 }
-.env-letter p{margin:0;opacity:0;transform:translateY(6px);transition:opacity .4s ease,transform .4s ease}
+.env-letter p{margin:0;opacity:0;transform:translate3d(0,8px,0);transition:opacity .45s ease,transform .45s cubic-bezier(.3,.9,.3,1)}
 .env-letter .l1{font-family:var(--body);font-size:13px;color:var(--plum-soft)}
 .env-letter .l2{font-family:var(--serif);font-weight:700;font-size:clamp(22px,6.4vw,30px);color:var(--rose-deep);letter-spacing:-.03em}
 .env-letter .l3{font-family:var(--serif);font-weight:600;font-size:13px;color:var(--plum)}
-.env-letter .rule{width:56px;height:1px;background:var(--gold);opacity:0;transition:opacity .4s ease}
-.gate.is-opening .env-letter{transform:translateY(-58%)}
-.gate.is-opening .env-letter .l1{opacity:1;transform:none;transition-delay:1.55s}
-.gate.is-opening .env-letter .l2{opacity:1;transform:none;transition-delay:1.8s}
-.gate.is-opening .env-letter .rule{opacity:1;transition-delay:2s}
-.gate.is-opening .env-letter .l3{opacity:1;transform:none;transition-delay:2.15s}
+.env-letter .rule{width:56px;height:1px;background:var(--gold);opacity:0;transform:scaleX(.4);transform-origin:50% 50%;transition:opacity .45s ease,transform .45s cubic-bezier(.3,.9,.3,1)}
+.gate.is-opening .env-letter{transform:translate3d(0,-58%,0)}
+.gate.is-opening .env-letter .l1{opacity:1;transform:none;transition-delay:1.4s}
+.gate.is-opening .env-letter .l2{opacity:1;transform:none;transition-delay:1.6s}
+.gate.is-opening .env-letter .rule{opacity:1;transform:none;transition-delay:1.8s}
+.gate.is-opening .env-letter .l3{opacity:1;transform:none;transition-delay:1.95s}
 
 .env-front{
   z-index:3;
-  background:linear-gradient(160deg,#F9C6DA,#F3A9C3);
+  background:linear-gradient(160deg,#FCD3E2,#F6B4CA);
   clip-path:polygon(0 30%,50% 72%,100% 30%,100% 100%,0 100%);
 }
+/* The flap is cut to meet the front panel's V exactly (with a hair of overlap), so a closed
+   envelope reads as one solid piece and the letter only appears once the flap is out of the way.
+   z-index swaps behind the envelope at the moment the flap is edge-on, so the fold never clips
+   through the body. */
 .env-flap{
   z-index:4;
-  background:linear-gradient(200deg,#F7B9CF,#EE98B7);
-  clip-path:polygon(0 0,100% 0,50% 62%);
+  background:linear-gradient(200deg,#F7B9CF,#EC93B3);
+  clip-path:polygon(0 0,100% 0,100% 33%,50% 74%,0 33%);
   transform-origin:50% 0;
-  transition:transform .65s cubic-bezier(.4,0,.2,1) .35s,background .65s ease .35s,z-index 0s linear .68s;
+  filter:drop-shadow(0 2px 3px rgba(143,15,68,.22));
+  transition:transform .75s cubic-bezier(.33,0,.2,1) .3s,background .75s ease .3s,z-index 0s linear .58s;
+  will-change:transform;
 }
-.gate.is-opening .env-flap{transform:rotateX(180deg);background:linear-gradient(200deg,#E58AAD,#D96F98);z-index:0}
+.gate.is-opening .env-flap{transform:rotateX(180deg);background:linear-gradient(200deg,#DF80A6,#CC5F8B);z-index:0}
 
 /* Seal is two clipped halves of the same disc, so it can crack apart. */
 .seal{
   position:absolute;left:50%;top:62%;z-index:5;translate:-50% -50%;
   width:84px;height:84px;padding:0;border:0;border-radius:50%;cursor:pointer;background:none;
   animation:seal 2.2s ease-in-out infinite;
+  transition:scale .35s ease;
 }
 .seal-half{
   position:absolute;inset:0;border-radius:50%;
@@ -210,37 +224,52 @@ a{color:inherit}
   background:radial-gradient(circle at 35% 30%,#E0457E,var(--rose-deep) 60%,#8F0F44);
   color:var(--cream);box-shadow:0 8px 18px -6px rgba(143,15,68,.8),inset 0 -4px 8px rgba(0,0,0,.2);
   font-family:var(--serif);font-weight:700;font-size:19px;letter-spacing:-.03em;
-  transition:transform .55s cubic-bezier(.3,.7,.4,1),opacity .45s ease .1s;
+  transition:transform .6s cubic-bezier(.3,.6,.35,1),opacity .5s ease .08s;
+  will-change:transform,opacity;
 }
 .seal-half::before{content:"";position:absolute;inset:7px;border-radius:50%;border:1.5px dashed rgba(255,248,242,.55)}
 .seal-half.left{clip-path:polygon(0 0,54% 0,46% 38%,56% 62%,48% 100%,0 100%)}
 .seal-half.right{clip-path:polygon(54% 0,100% 0,100% 100%,48% 100%,56% 62%,46% 38%)}
-@keyframes seal{50%{transform:scale(1.06)}}
-.gate.is-opening .seal{animation:none;pointer-events:none;outline:none}
-.gate.is-opening .seal-half.left{transform:translate(-46px,34px) rotate(-38deg);opacity:0}
-.gate.is-opening .seal-half.right{transform:translate(46px,34px) rotate(38deg);opacity:0}
+/* Pulsing `scale` rather than `transform` leaves the halves' own transform free, and lets the
+   seal ease back to rest when the animation is dropped instead of snapping mid-pulse. */
+@keyframes seal{50%{scale:1.06}}
+.gate.is-opening .seal{animation:none;scale:1;pointer-events:none;outline:none}
+.gate.is-opening .seal-half.left{transform:translate3d(-52px,38px,0) rotate(-40deg);opacity:0}
+.gate.is-opening .seal-half.right{transform:translate3d(52px,38px,0) rotate(40deg);opacity:0}
 
-/* Hearts and petals that burst out as the letter rises. */
-.burst{position:absolute;left:50%;top:18%;z-index:6;width:0;height:0;pointer-events:none}
+/* Hearts and petals that stream out as the letter rises. The layer sits at the same depth as the
+   letter but earlier in the DOM, so they read as coming from inside the envelope and pass behind
+   the paper instead of speckling it. */
+.burst{position:absolute;left:50%;top:34%;z-index:2;width:0;height:0;pointer-events:none}
 .burst i{
-  position:absolute;left:0;top:0;width:20px;height:20px;margin:-10px;opacity:0;
-  font-style:normal;font-size:20px;line-height:20px;text-align:center;color:var(--rose);
+  position:absolute;left:0;top:0;width:26px;height:26px;margin:-13px;opacity:0;
+  font-style:normal;font-size:24px;line-height:26px;text-align:center;color:var(--rose);
+  will-change:transform,opacity;
 }
-.gate.is-opening .burst i{animation:burst 1.4s cubic-bezier(.15,.7,.3,1) forwards;animation-delay:var(--d,1s)}
+.gate.is-opening .burst i{animation:burst 1.5s cubic-bezier(.16,.68,.3,1) forwards;animation-delay:var(--d,1s)}
 @keyframes burst{
-  0%{opacity:0;transform:translate(0,0) scale(.4)}
-  15%{opacity:1}
-  100%{opacity:0;transform:translate(var(--x),var(--y)) scale(1.1) rotate(var(--r))}
+  0%{opacity:0;transform:translate3d(0,0,0) scale(.45)}
+  12%{opacity:.95}
+  100%{opacity:0;transform:translate3d(var(--x),var(--y),0) scale(1.15) rotate(var(--r))}
 }
 
-/* Leaving: the envelope drops away and the letter zooms toward the viewer as the screen fades. */
-.env-back,.env-front{transition:transform .6s ease,opacity .6s ease}
-.gate.is-leaving .env-back,.gate.is-leaving .env-front,.gate.is-leaving .env-flap{transform:translateY(40px);opacity:0;transition-delay:0s}
-.gate.is-leaving .env-letter{transform:translateY(-40%) scale(1.5);opacity:0;transition:transform .7s cubic-bezier(.4,0,.2,1),opacity .6s ease .1s}
+/* Leaving: the envelope drops away and the letter drifts toward the viewer as the screen fades.
+   The flap keeps its rotateX(180deg) here — dropping it would interpolate the fold back through
+   the envelope — and the letter keeps the translate it rose to, so neither jumps on the handover. */
+.env-back,.env-front{transition:transform .65s cubic-bezier(.4,0,.2,1),opacity .55s ease;will-change:transform,opacity}
+.gate.is-leaving .env-back,.gate.is-leaving .env-front{transform:translate3d(0,44px,0);opacity:0;transition-delay:0s}
+.gate.is-leaving .env-flap{
+  transform:rotateX(180deg) translate3d(0,-44px,0);opacity:0;
+  transition:transform .65s cubic-bezier(.4,0,.2,1),opacity .55s ease;
+}
+.gate.is-leaving .env-letter{
+  transform:translate3d(0,-64%,0) scale(1.12);opacity:0;
+  transition:transform .8s cubic-bezier(.3,0,.2,1),opacity .6s ease .12s;
+}
 
 @media (prefers-reduced-motion:reduce){
   .gate{transition:none}
-  .seal{animation:none}
+  .seal{animation:none;transition:none}
 }
 
 /* ── falling petals ──────────────────────── */
@@ -464,7 +493,7 @@ a{color:inherit}
 // pauses it straight away; once the envelope animation ends the page shows and the clip restarts
 // from the top. A second tap skips the animation.
 (function () {
-  var OPEN_MS = 3000, LEAVE_MS = 650;
+  var OPEN_MS = 3000, LEAVE_MS = 750;
   var video = document.getElementById('video');
   var gate = document.getElementById('gate');
   var seal = document.getElementById('gate-btn');
@@ -526,14 +555,14 @@ a{color:inherit}
   var COLORS = ['#E46A97', '#C2185B', '#F3A9C3', '#D4A15A'];
   for (var i = 0; i < 18; i++) {
     var p = document.createElement('i');
-    var angle = (-160 + Math.random() * 140) * Math.PI / 180;
-    var dist = 110 + Math.random() * 120;
+    var angle = (-172 + Math.random() * 164) * Math.PI / 180;
+    var dist = 150 + Math.random() * 140;
     p.textContent = GLYPHS[i % GLYPHS.length];
     p.style.color = COLORS[i % COLORS.length];
     p.style.setProperty('--x', Math.round(Math.cos(angle) * dist) + 'px');
     p.style.setProperty('--y', Math.round(Math.sin(angle) * dist) + 'px');
     p.style.setProperty('--r', Math.round(Math.random() * 120 - 60) + 'deg');
-    p.style.setProperty('--d', (1 + Math.random() * .5).toFixed(2) + 's');
+    p.style.setProperty('--d', (.95 + Math.random() * .55).toFixed(2) + 's');
     box.appendChild(p);
   }
 })();
