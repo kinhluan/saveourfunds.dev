@@ -270,6 +270,71 @@ a{color:inherit}
   .ticker-track [aria-hidden]{display:none}
 }
 
+/* ── portrait wall: wood frames with a white mat, hung like a gallery wall ──
+   Desktop: frames are placed by hand on a 100 × 40 canvas measured in container-width units
+   (cqw), and the canvas width is capped from the viewport height so the whole wall fits on one
+   screen. Mobile: an even 2-column grid. Every photo stays square. */
+.crew{
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;min-height:100svh;
+  padding:clamp(28px,4vh,56px) var(--gutter);
+  background:
+    radial-gradient(60% 50% at 50% 0%,#FFFFFF 0%,transparent 70%),
+    linear-gradient(180deg,#FBF4EF,#F6E6E4);
+  color:var(--plum);
+}
+.crew-head{margin:0 auto clamp(18px,3vh,36px);text-align:center}
+.crew-kicker{margin:0 0 10px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--plum-soft)}
+.crew-title{margin:0;font-family:var(--serif);font-weight:600;font-size:clamp(1.8rem,3.6vw,3rem);line-height:1.1;letter-spacing:-.03em}
+.crew-title em{font-style:normal;font-weight:700;color:var(--rose-deep)}
+.crew-caption{margin:10px 0 0;font-family:var(--serif);font-weight:500;font-size:clamp(15px,1.4vw,18px);color:var(--plum-soft)}
+
+/* Mosaic: 5 equal columns over 8 equal rows; tiles span 2 rows (landscape, about 5:4), 3 rows
+   (about 5:6) or 4 rows (tall, about 5:8). The wall's aspect ratio is chosen so those spans
+   land on those ratios, and its width is capped from the viewport height so it fits one screen. */
+.wall{
+  --gap:clamp(8px,1vw,14px);
+  margin:0 auto;padding:0;list-style:none;
+  width:min(100%,1180px,calc((100svh - 240px) * 100 / 64));
+  aspect-ratio:100 / 64;min-height:0;
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));gap:var(--gap);
+}
+.wall li{min-width:0;min-height:0}
+.tile{
+  position:relative;display:block;width:100%;height:100%;margin:0;padding:0;border:0;cursor:zoom-in;
+  overflow:hidden;border-radius:12px;background:var(--blush);
+  box-shadow:0 1px 2px rgba(74,18,56,.12),0 14px 28px -14px rgba(74,18,56,.4);
+}
+.tile img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:var(--pos,50% 50%)}
+.tile:focus-visible{outline:2px solid var(--rose-deep);outline-offset:3px}
+
+/* Mobile: two equal square tiles per row, so every photo shows whole. */
+@media (max-width:720px){
+  .crew{min-height:0;padding-block:56px}
+  .wall{width:100%;aspect-ratio:auto;grid-template-rows:none;grid-auto-rows:auto;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .wall li{grid-column:auto !important;grid-row:auto !important}
+  .tile{aspect-ratio:1;height:auto}
+  .tile img{object-position:50% 50%}
+}
+
+/* Enlarged portrait */
+.portrait{
+  padding:0;margin:auto;width:min(calc(100vw - 32px),560px);max-width:none;max-height:calc(100dvh - 32px);
+  border:max(8px,1vw) solid #B9874F;
+  border-image:linear-gradient(135deg,#D2A46C,#A9763F 40%,#C89559 70%,#9C6A36) 1;
+  background:#FFFDFB;overflow:visible;
+  box-shadow:0 30px 70px -20px rgba(74,18,56,.6);
+}
+.portrait::backdrop{background:rgba(74,18,56,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.portrait[open]{animation:pop .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{opacity:0;transform:scale(.95)}}
+.portrait img{display:block;width:calc(100% - 2 * clamp(20px,5vw,40px));aspect-ratio:1;height:auto;max-height:calc(100dvh - 140px);object-fit:cover;margin:clamp(20px,5vw,40px);background:var(--blush)}
+.portrait-close{
+  position:absolute;top:-18px;right:-18px;width:40px;height:40px;padding:0;border-radius:50%;cursor:pointer;
+  border:0;background:#FFFDFB;color:var(--plum);font-size:15px;box-shadow:0 6px 14px -6px rgba(74,18,56,.5);
+}
+@media (prefers-reduced-motion:reduce){.portrait[open]{animation:none}}
+
 /* ── colophon ────────────────────────────── */
 .colophon{
   display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;
@@ -368,6 +433,20 @@ a{color:inherit}
     <span aria-hidden="true">Chúc mừng 20/10</span><span aria-hidden="true">Luôn xinh đẹp</span><span aria-hidden="true">Luôn hạnh phúc</span><span aria-hidden="true">Gửi các chị em SOF</span>
   </div>
 </div>
+
+<section class="crew" aria-labelledby="crew-title">
+  <div class="crew-head">
+    <p class="crew-kicker">Những bông hoa của team</p>
+    <h2 class="crew-title" id="crew-title"><em>14</em> bông hoa của&nbsp;SOF</h2>
+    <p class="crew-caption">Đoán xem mình ở đâu nào?</p>
+  </div>
+  <ul class="wall" id="crew-grid"></ul>
+</section>
+
+<dialog class="portrait" id="portrait" aria-label="Ảnh chân dung">
+  <img id="portrait-img" alt="">
+  <button type="button" class="portrait-close" id="portrait-close" aria-label="Đóng">✕</button>
+</dialog>
 
 <footer class="colophon">
   <a href="index.html">← saveourfunds.dev</a>
@@ -475,6 +554,59 @@ a{color:inherit}
   var small = innerWidth < 700;
   scatter(document.getElementById('petals'), small ? 16 : 30);
   scatter(document.getElementById('gate-petals'), small ? 12 : 22);
+})();
+
+// Portrait mosaic. COLUMNS lists the wall left to right; each tile is [photo, rows, pos]:
+// rows is how many of the 8 rows it spans (2 = landscape, 3 = near-square portrait, 4 = tall), and
+// pos is the object-position that keeps the person in frame when the square photo is cropped.
+// Each column must add up to 8 rows. Photos are square web-size copies in chan-dung/web.
+(function () {
+  var COLUMNS = [
+    [['linh-t', 2, '50% 12%'], ['hong',   3, '38% 50%'], ['ngan',   3, '55% 50%']],
+    [['nguyet', 3, '55% 50%'], ['van',    2, '50% 68%'], ['dao',    3, '70% 50%']],
+    [['ngoc',   4, '58% 50%'], ['trinh',  4, '48% 50%']],
+    [['vi',     3, '58% 50%'], ['linh',   3, '50% 50%'], ['my',     2, '50% 72%']],
+    [['thu',    2, '50% 28%'], ['nhi',    4, '35% 50%'], ['thao',   2, '50% 40%']]
+  ];
+
+  var wall = document.getElementById('crew-grid');
+  var dialog = document.getElementById('portrait');
+  var bigImg = document.getElementById('portrait-img');
+  var n = 0;
+
+  COLUMNS.forEach(function (column, c) {
+    var row = 1;
+    column.forEach(function (tile) {
+      var photo = 'chan-dung/web/' + tile[0] + '.jpg';
+      var index = ++n;
+      var li = document.createElement('li');
+      li.style.gridColumn = String(c + 1);
+      li.style.gridRow = row + ' / span ' + tile[1];
+      row += tile[1];
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'tile';
+      btn.style.setProperty('--pos', tile[2]);
+      btn.setAttribute('aria-label', 'Xem ảnh ' + index);
+      var img = document.createElement('img');
+      img.src = photo;
+      img.alt = 'Chân dung ' + index;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      btn.appendChild(img);
+      btn.addEventListener('click', function () {
+        bigImg.src = photo;
+        bigImg.alt = 'Chân dung ' + index;
+        dialog.showModal();
+      });
+      li.appendChild(btn);
+      wall.appendChild(li);
+    });
+  });
+
+  document.getElementById('crew-title').querySelector('em').textContent = n;
+  document.getElementById('portrait-close').addEventListener('click', function () { dialog.close(); });
+  dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
 })();
 </script>
 </body>
