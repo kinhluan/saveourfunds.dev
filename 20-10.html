@@ -289,29 +289,34 @@ a{color:inherit}
 .crew-title em{font-style:normal;font-weight:700;color:var(--rose-deep)}
 .crew-caption{margin:10px 0 0;font-family:var(--serif);font-weight:500;font-size:clamp(15px,1.4vw,18px);color:var(--plum-soft)}
 
-/* Mosaic: 5 equal columns over 8 equal rows; tiles span 2 rows (landscape, about 5:4), 3 rows
-   (about 5:6) or 4 rows (tall, about 5:8). The wall's aspect ratio is chosen so those spans
-   land on those ratios, and its width is capped from the viewport height so it fits one screen. */
+/* Mosaic: 5 equal columns over 12 equal rows, mortared with a 4px joint. Twelve rows is what
+   makes the wall lively: a tile spans 3 to 7 of them, so heights run from wide landscape to tall
+   portrait and no two neighbouring columns break at the same row. The wall spans the full content
+   width like every other block on the page and keeps a 17 / 9 ratio. Only the four outer corners
+   are rounded: the wall clips them, so each tile itself stays square-cornered. */
 .wall{
-  --gap:clamp(8px,1vw,14px);
+  --gap:4px;
   margin:0 auto;padding:0;list-style:none;
-  width:min(100%,1180px,calc((100svh - 240px) * 100 / 64));
-  aspect-ratio:100 / 64;min-height:0;
-  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));gap:var(--gap);
+  width:100%;flex:none;min-height:0;
+  aspect-ratio:17 / 9;
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(12,minmax(0,1fr));gap:var(--gap);
+  border-radius:16px;overflow:hidden;
+  box-shadow:0 1px 2px rgba(74,18,56,.12),0 24px 48px -22px rgba(74,18,56,.45);
 }
 .wall li{min-width:0;min-height:0}
 .tile{
   position:relative;display:block;width:100%;height:100%;margin:0;padding:0;border:0;cursor:zoom-in;
-  overflow:hidden;border-radius:12px;background:var(--blush);
-  box-shadow:0 1px 2px rgba(74,18,56,.12),0 14px 28px -14px rgba(74,18,56,.4);
+  overflow:hidden;border-radius:0;background:var(--blush);
 }
 .tile img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:var(--pos,50% 50%)}
-.tile:focus-visible{outline:2px solid var(--rose-deep);outline-offset:3px}
+/* The wall clips its children, so the focus ring is drawn inside the tile. */
+.tile:focus-visible{outline:2px solid var(--rose-deep);outline-offset:-4px}
 
-/* Mobile: two equal square tiles per row, so every photo shows whole. */
+/* Mobile: two equal square tiles per row, so every photo shows whole and the 14 of them fill
+   seven rows exactly. */
 @media (max-width:720px){
   .crew{min-height:0;padding-block:56px}
-  .wall{width:100%;aspect-ratio:auto;grid-template-rows:none;grid-auto-rows:auto;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .wall{width:100%;aspect-ratio:auto;grid-template-rows:none;grid-auto-rows:auto;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap)}
   .wall li{grid-column:auto !important;grid-row:auto !important}
   .tile{aspect-ratio:1;height:auto}
   .tile img{object-position:50% 50%}
@@ -557,16 +562,18 @@ a{color:inherit}
 })();
 
 // Portrait mosaic. COLUMNS lists the wall left to right; each tile is [photo, rows, pos]:
-// rows is how many of the 8 rows it spans (2 = landscape, 3 = near-square portrait, 4 = tall), and
-// pos is the object-position that keeps the person in frame when the square photo is cropped.
-// Each column must add up to 8 rows. Photos are square web-size copies in chan-dung/web.
+// rows is how many of the 12 rows it spans (3 = landscape, 4 = slightly wide, 5 = upright,
+// 7 = the tall one), and pos is the object-position that keeps the person in frame when the
+// square photo is cropped. The spans are deliberately mixed so neighbouring columns break at
+// different rows; the middle column holds the tallest tile. Each column must add up to 12 rows.
+// Photos are square web-size copies in chan-dung/web.
 (function () {
   var COLUMNS = [
-    [['linh-t', 2, '50% 12%'], ['hong',   3, '38% 50%'], ['ngan',   3, '55% 50%']],
-    [['nguyet', 3, '55% 50%'], ['van',    2, '50% 68%'], ['dao',    3, '70% 50%']],
-    [['ngoc',   4, '58% 50%'], ['trinh',  4, '48% 50%']],
-    [['vi',     3, '58% 50%'], ['linh',   3, '50% 50%'], ['my',     2, '50% 72%']],
-    [['thu',    2, '50% 28%'], ['nhi',    4, '35% 50%'], ['thao',   2, '50% 40%']]
+    [['linh-t', 3, '50% 12%'], ['hong',    5, '38% 50%'], ['ngan',  4, '55% 45%']],
+    [['ngoc',   4, '58% 45%'], ['nguyet',  5, '55% 50%'], ['thu',   3, '50% 28%']],
+    [['dao',    5, '70% 50%'], ['my',      7, '52% 50%']],
+    [['van',    3, '50% 68%'], ['linh',    4, '50% 45%'], ['vi',    5, '58% 50%']],
+    [['nhi',    5, '35% 50%'], ['trinh',   4, '48% 42%'], ['thao',  3, '50% 40%']]
   ];
 
   var wall = document.getElementById('crew-grid');
