@@ -35,6 +35,7 @@
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 body{
   margin:0;min-height:100svh;display:flex;flex-direction:column;
   background:var(--ink);color:var(--chalk);
@@ -66,7 +67,7 @@ a{color:inherit}
   position:relative;overflow:hidden;flex:1;
   display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);align-items:center;
   gap:clamp(22px,4vw,56px);
-  padding:var(--hero-pad) var(--gutter) calc(var(--hero-pad) + 12px);
+  padding:var(--hero-pad) var(--gutter) calc(var(--hero-pad) + 58px);
   background:
     radial-gradient(60% 70% at 0% 0%,#FFD3E2 0%,transparent 70%),
     radial-gradient(50% 60% at 100% 100%,#F9C6DA 0%,transparent 70%),
@@ -98,9 +99,31 @@ a{color:inherit}
 .lede{margin:clamp(16px,2.2vw,22px) 0 0;max-width:36ch;font-size:clamp(17px,1.5vw,19px);line-height:1.6;color:var(--plum-soft)}
 .lede b{font-weight:600;color:var(--plum)}
 
+/* Scroll cue. The hero fills the screen on its own, so the gallery under it needs announcing;
+   the pill sits in the hero's bottom padding, which the video's height budget allows for. */
+.scroll-cue{
+  position:absolute;left:50%;bottom:clamp(12px,2.2vh,22px);z-index:3;translate:-50% 0;
+  display:inline-flex;align-items:center;gap:10px;
+  padding:9px 16px 9px 20px;border-radius:999px;
+  border:1px solid rgba(74,18,56,.16);background:rgba(255,255,255,.62);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  box-shadow:0 10px 24px -14px rgba(74,18,56,.45);
+  font-family:var(--serif);font-weight:600;font-size:clamp(13px,1.2vw,15px);
+  color:var(--plum);text-decoration:none;white-space:nowrap;
+  transition:transform .25s cubic-bezier(.4,0,.2,1),background .25s ease,box-shadow .25s ease;
+}
+.scroll-cue:hover{transform:translateY(2px);background:rgba(255,255,255,.82);box-shadow:0 14px 30px -14px rgba(74,18,56,.5)}
+.scroll-cue svg{
+  width:17px;height:17px;flex:none;
+  fill:none;stroke:var(--rose-deep);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;
+  animation:nudge 1.8s ease-in-out infinite;
+}
+@keyframes nudge{0%,100%{transform:translateY(-2px)}50%{transform:translateY(3px)}}
+@media (prefers-reduced-motion:reduce){.scroll-cue svg{animation:none}}
+
 /* Landscape clip in a cream mat with a thin gold rule. Width is also capped from the viewport
    height so the whole 16:9 picture stays on screen. */
-.video-wrap{position:relative;z-index:2;justify-self:center;width:min(100%,calc((100vh - 190px) * 16 / 9 + 32px));width:min(100%,calc((100svh - 190px) * 16 / 9 + 32px))}
+.video-wrap{position:relative;z-index:2;justify-self:center;width:min(100%,calc((100vh - 236px) * 16 / 9 + 32px));width:min(100%,calc((100svh - 236px) * 16 / 9 + 32px))}
 @media (max-width:980px){.video-wrap{width:min(100%,760px)}}
 .video-card{
   position:relative;margin:0;padding:14px;
@@ -459,6 +482,11 @@ a{color:inherit}
       </button>
     </figure>
   </div>
+
+  <a class="scroll-cue" href="#crew">
+    Chưa hết đâu, còn ở dưới
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v13M6.5 12.5 12 18l5.5-5.5"/></svg>
+  </a>
 </main>
 
 <div class="ticker">
@@ -468,7 +496,7 @@ a{color:inherit}
   </div>
 </div>
 
-<section class="crew" aria-labelledby="crew-title">
+<section class="crew" id="crew" aria-labelledby="crew-title">
   <div class="crew-head">
     <p class="crew-kicker">Những bông hoa của team</p>
     <h2 class="crew-title" id="crew-title"><em>14</em> bông hoa của&nbsp;SOF</h2>
