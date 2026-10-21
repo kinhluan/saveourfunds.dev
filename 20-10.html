@@ -341,17 +341,18 @@ a{color:inherit}
 .crew-title em{font-style:normal;font-weight:700;color:var(--rose-deep)}
 .crew-caption{margin:10px 0 0;font-family:var(--serif);font-weight:500;font-size:clamp(15px,1.4vw,18px);color:var(--plum-soft)}
 
-/* Mosaic: 5 equal columns over 12 equal rows, mortared with a 4px joint. Twelve rows is what
-   makes the wall lively: a tile spans 3 to 7 of them, so heights run from wide landscape to tall
-   portrait and no two neighbouring columns break at the same row. The wall spans the full content
-   width like every other block on the page and keeps a 17 / 9 ratio. Only the four outer corners
-   are rounded: the wall clips them, so each tile itself stays square-cornered. */
+/* Mosaic: 5 equal columns over 14 equal rows, mortared with a 4px joint. The row count is what
+   makes the wall lively: a tile spans 3 to 8 of them, so heights run from wide landscape to tall
+   portrait and no two neighbouring columns break at the same row. Fourteen also divides neatly
+   enough to seat fifteen photos — one column takes four tiles, the middle one takes two. The wall
+   spans the full content width like every other block on the page and keeps a 17 / 9 ratio. Only
+   the four outer corners are rounded: the wall clips them, so each tile stays square-cornered. */
 .wall{
   --gap:4px;
   margin:0 auto;padding:0;list-style:none;
   width:100%;flex:none;min-height:0;
   aspect-ratio:17 / 9;
-  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(12,minmax(0,1fr));gap:var(--gap);
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(14,minmax(0,1fr));gap:var(--gap);
   border-radius:16px;overflow:hidden;
   box-shadow:0 1px 2px rgba(74,18,56,.12),0 24px 48px -22px rgba(74,18,56,.45);
 }
@@ -364,12 +365,14 @@ a{color:inherit}
 /* The wall clips its children, so the focus ring is drawn inside the tile. */
 .tile:focus-visible{outline:2px solid var(--rose-deep);outline-offset:-4px}
 
-/* Mobile: two equal square tiles per row, so every photo shows whole and the 14 of them fill
-   seven rows exactly. */
+/* Mobile: two equal square tiles per row, so every photo shows whole. Fifteen of them would
+   leave a half-empty last row, so the showcase tile takes a full row and `dense` backfills the
+   gap that opens behind it — sixteen cells over eight tidy rows. */
 @media (max-width:720px){
   .crew{min-height:0;padding-block:56px}
-  .wall{width:100%;aspect-ratio:auto;grid-template-rows:none;grid-auto-rows:auto;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap)}
+  .wall{width:100%;aspect-ratio:auto;grid-template-rows:none;grid-auto-rows:auto;grid-auto-flow:row dense;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap)}
   .wall li{grid-column:auto !important;grid-row:auto !important}
+  .wall li.is-hero{grid-column:1 / -1 !important}
   .tile{aspect-ratio:1;height:auto}
   .tile img{object-position:50% 50%}
 }
@@ -499,7 +502,7 @@ a{color:inherit}
 <section class="crew" id="crew" aria-labelledby="crew-title">
   <div class="crew-head">
     <p class="crew-kicker">Những bông hoa của team</p>
-    <h2 class="crew-title" id="crew-title"><em>14</em> bông hoa của&nbsp;SOF</h2>
+    <h2 class="crew-title" id="crew-title"><em>15</em> bông hoa của&nbsp;SOF</h2>
     <p class="crew-caption">Đoán xem mình ở đâu nào?</p>
   </div>
   <ul class="wall" id="crew-grid"></ul>
@@ -618,19 +621,19 @@ a{color:inherit}
   scatter(document.getElementById('gate-petals'), small ? 12 : 22);
 })();
 
-// Portrait mosaic. COLUMNS lists the wall left to right; each tile is [photo, rows, pos]:
-// rows is how many of the 12 rows it spans (3 = landscape, 4 = slightly wide, 5 = upright,
-// 7 = the tall one), and pos is the object-position that keeps the person in frame when the
-// square photo is cropped. The spans are deliberately mixed so neighbouring columns break at
-// different rows; the middle column holds the tallest tile. Each column must add up to 12 rows.
-// Photos are square web-size copies in chan-dung/web.
+// Portrait mosaic. COLUMNS lists the wall left to right; each tile is [photo, rows, pos, class]:
+// rows is how many of the 14 rows it spans (3 = wide, 4 = slightly wide, 5 = near-square,
+// 6 = upright, 8 = the tall one), pos is the object-position that keeps the person in frame when
+// the square photo is cropped, and class is optional. The spans are deliberately mixed so
+// neighbouring columns break at different rows; the middle column holds the two tallest tiles.
+// Each column must add up to 14 rows. Photos are square web-size copies in chan-dung/web.
 (function () {
   var COLUMNS = [
-    [['linh-t', 3, '50% 12%'], ['hong',    5, '38% 50%'], ['ngan',  4, '55% 45%']],
-    [['ngoc',   4, '58% 45%'], ['nguyet',  5, '55% 50%'], ['thu',   3, '50% 28%']],
-    [['dao',    5, '70% 50%'], ['my',      7, '52% 50%']],
-    [['van',    3, '50% 68%'], ['linh',    4, '50% 45%'], ['vi',    5, '58% 50%']],
-    [['nhi',    5, '35% 50%'], ['trinh',   4, '48% 42%'], ['thao',  3, '50% 40%']]
+    [['van',    4, '50% 68%'], ['hong',   5, '38% 50%'], ['ngan',  5, '55% 50%']],
+    [['ngoc',   5, '58% 48%'], ['nguyet', 5, '55% 50%'], ['thu',   4, '50% 28%']],
+    [['dao',    6, '70% 50%'], ['my',     8, '52% 50%', 'is-hero']],
+    [['anh',    5, '60% 48%'], ['vi',     5, '58% 50%'], ['linh',  4, '50% 42%']],
+    [['linh-t', 3, '50% 12%'], ['nhi',    4, '35% 45%'], ['trinh', 4, '48% 42%'], ['thao', 3, '50% 40%']]
   ];
 
   var wall = document.getElementById('crew-grid');
@@ -644,6 +647,7 @@ a{color:inherit}
       var photo = 'chan-dung/web/' + tile[0] + '.jpg';
       var index = ++n;
       var li = document.createElement('li');
+      if (tile[3]) li.className = tile[3];
       li.style.gridColumn = String(c + 1);
       li.style.gridRow = row + ' / span ' + tile[1];
       row += tile[1];
